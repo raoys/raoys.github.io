@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="VMware中CentOS7静态IP的设置, 饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
+    <meta name="keywords" content="Linux下如何释放cache内存(drop_caches), 饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
     <meta name="description" content="饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>VMware中CentOS7静态IP的设置 | Jason Rao&#39;s Blog</title>
+    <title>Linux下如何释放cache内存(drop_caches) | Jason Rao&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">VMware中CentOS7静态IP的设置</h1>
+                    <h1 class="description center-align post-title">Linux下如何释放cache内存(drop_caches)</h1>
                 </div>
             </div>
         </div>
@@ -431,12 +431,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/CentOS/">
-                                <span class="chip bg-color">CentOS</span>
-                            </a>
-                        
-                            <a href="/tags/VMware/">
-                                <span class="chip bg-color">VMware</span>
+                            <a href="/tags/Linux/">
+                                <span class="chip bg-color">Linux</span>
                             </a>
                         
                     </div>
@@ -460,7 +456,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2015-10-13
+                    2015-10-01
                 </div>
                 
 
@@ -481,24 +477,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><strong>VMware中CentOS7系统设置静态IP的步骤</strong> </p>
-<h4 id="VMware下有三种网络连接模式"><a href="#VMware下有三种网络连接模式" class="headerlink" title="VMware下有三种网络连接模式"></a>VMware下有三种网络连接模式</h4><p>一、birdged（桥接）<br>桥接网络是指本地物理网卡和虚拟网卡通过VMnet0虚拟交换机进行桥接，物理网卡和虚拟网卡在拓扑图上处于同等地位，那么物理网卡和虚拟网卡就相当于处于同一个网段，虚拟交换机就相当于一台现实网络中的交换机,所以两个网卡的IP地址也要设置为同一网段。</p>
-<p>二、NAT(网络地址转换)<br>NAT模式中，就是让虚拟机借助NAT(网络地址转换)功能，通过宿主机器所在的网络来访问公网。 NAT模式中，虚拟机的网卡和物理网卡的网络，不在同一个网络，虚拟机的网卡，是在VMware提供的一个虚拟网络。</p>
-<p>三、Host-only(仅主机)<br>在Host-Only模式下，虚拟网络是一个全封闭的网络，它唯一能够访问的就是主机。其实Host-Only网络和NAT网络很相似，不同的地方就是Host-Only网络没有NAT服务，所以虚拟网络不能连接到Internet。主机和虚拟机之间的通信是通过VMware Network Adepter VMnet1虚拟网卡来实现的。</p>
-<p>这里主要讨论桥接和NAT模式</p>
-<h4 id="NAT和桥接的比较"><a href="#NAT和桥接的比较" class="headerlink" title="NAT和桥接的比较"></a>NAT和桥接的比较</h4><p>(1) NAT模式和桥接模式虚拟机都可以上外网。<br>(2) 由于NAT的网络在VMware提供的一个虚拟网络里，所以局域网其他主机是无法访问虚拟机的，而宿主机可以访问虚拟机，虚拟机可以访问局域网的所有主机，因为真实的局域网相对于NAT的虚拟网络，就是NAT的虚拟网络的外网，不懂的人可以查查NAT的相关知识。<br>(3) 桥接模式下，多个虚拟机之间可以互相访问；NAT模式下，多个虚拟机之间也可以相互访问。</p>
-<h4 id="步骤1-在虚拟机中使用NAT"><a href="#步骤1-在虚拟机中使用NAT" class="headerlink" title="步骤1 在虚拟机中使用NAT"></a>步骤1 在虚拟机中使用NAT</h4><p><code>如图：</code><br><img src="/img/linux/2015-10-13-0633-linux-centos-01.png"></p>
-<p>接下来看看在NAT模式下，进入到CentOS7系统后，该如何为其配置网络：</p>
-<h4 id="步骤2-查看宿主机（本机）的默认网关"><a href="#步骤2-查看宿主机（本机）的默认网关" class="headerlink" title="步骤2 查看宿主机（本机）的默认网关"></a>步骤2 查看宿主机（本机）的默认网关</h4><p><code>如图：</code><br><img src="/img/linux/2015-10-13-0633-linux-centos-02.png"><br>上图为公司内外，默认网关为：10.0.0.1</p>
-<h4 id="步骤3-配置VMware的NAT模式设置"><a href="#步骤3-配置VMware的NAT模式设置" class="headerlink" title="步骤3 配置VMware的NAT模式设置"></a>步骤3 配置VMware的NAT模式设置</h4><p><code>如图：</code><br><img src="/img/linux/2015-10-13-0633-linux-centos-03.png"></p>
-<h4 id="步骤4-进入centos7系统，执行如下命令修改网络配置"><a href="#步骤4-进入centos7系统，执行如下命令修改网络配置" class="headerlink" title="步骤4 进入centos7系统，执行如下命令修改网络配置"></a>步骤4 进入centos7系统，执行如下命令修改网络配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">TYPE&#x3D;Ethernet</span><br><span class="line">PROXY_METHOD&#x3D;none</span><br><span class="line">BROWSER_ONLY&#x3D;no</span><br><span class="line">BOOTPROTO&#x3D;static          # 静态IP</span><br><span class="line">DEFROUTE&#x3D;yes</span><br><span class="line">IPV4_FAILURE_FATAL&#x3D;no</span><br><span class="line">IPV6INIT&#x3D;yes</span><br><span class="line">IPV6_AUTOCONF&#x3D;yes</span><br><span class="line">IPV6_DEFROUTE&#x3D;yes</span><br><span class="line">IPV6_FAILURE_FATAL&#x3D;no</span><br><span class="line">IPV6_ADDR_GEN_MODE&#x3D;stable-privacy</span><br><span class="line">NAME&#x3D;ens33</span><br><span class="line">UUID&#x3D;ab60eed1-2349-495d-a33d-2a96c4f8cbb3</span><br><span class="line">DEVICE&#x3D;ens33</span><br><span class="line">ONBOOT&#x3D;yes                #随系统启动</span><br><span class="line">IPADDR&#x3D;10.0.100.100       #设置固定IP</span><br><span class="line">NETMASK&#x3D;255.255.255.0     </span><br><span class="line">GATEWAY&#x3D;10.0.100.2        #第二步中 NAT设置中的网关IP</span><br><span class="line">DNS1&#x3D;119.29.29.29         #DNSIP，基本上通用</span><br></pre></td></tr></table></figure>
-<p>保存后重启网络服务，执行如下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network.service</span><br></pre></td></tr></table></figure>
-
-<h4 id="步骤5-最后验证网络配置是否成功"><a href="#步骤5-最后验证网络配置是否成功" class="headerlink" title="步骤5 最后验证网络配置是否成功"></a>步骤5 最后验证网络配置是否成功</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping baidu.com</span><br></pre></td></tr></table></figure>
-<p><code>结果如图：</code><br><img src="/img/linux/2015-10-13-0633-linux-centos-04.png"><br>如上图ping通了，就说明NAT模式下的网络配置成功了！</p>
+                <p><strong>最近使用的linux系统内存缓存越来越大，free内存越来越小，后来从网上找到资料完美解决。</strong> </p>
+<h4 id="第1步：执行-cat-proc-sys-vm-drop-caches名称，查看缓存值，默认值为0。（1-清空页缓存；2-清空inode和目录树缓存；3-清空所有缓存）"><a href="#第1步：执行-cat-proc-sys-vm-drop-caches名称，查看缓存值，默认值为0。（1-清空页缓存；2-清空inode和目录树缓存；3-清空所有缓存）" class="headerlink" title="第1步：执行 cat /proc/sys/vm/drop_caches名称，查看缓存值，默认值为0。（1-清空页缓存；2-清空inode和目录树缓存；3-清空所有缓存）"></a>第1步：执行 cat /proc/sys/vm/drop_caches名称，查看缓存值，默认值为0。（1-清空页缓存；2-清空inode和目录树缓存；3-清空所有缓存）</h4><h4 id="第2步：执行sync命令，手动执行sync命令（描述：sync-命令运行-sync-子例程。如果必须停止系统，则运行-sync-命令以确保文件系统的完整性。sync-命令将所有未写的系统缓冲区写到磁盘中，包含已修改的-i-node、已延迟的块-I-O-和读写映射文件）"><a href="#第2步：执行sync命令，手动执行sync命令（描述：sync-命令运行-sync-子例程。如果必须停止系统，则运行-sync-命令以确保文件系统的完整性。sync-命令将所有未写的系统缓冲区写到磁盘中，包含已修改的-i-node、已延迟的块-I-O-和读写映射文件）" class="headerlink" title="第2步：执行sync命令，手动执行sync命令（描述：sync 命令运行 sync 子例程。如果必须停止系统，则运行 sync 命令以确保文件系统的完整性。sync 命令将所有未写的系统缓冲区写到磁盘中，包含已修改的 i-node、已延迟的块 I/O 和读写映射文件）"></a>第2步：执行sync命令，手动执行sync命令（描述：sync 命令运行 sync 子例程。如果必须停止系统，则运行 sync 命令以确保文件系统的完整性。sync 命令将所有未写的系统缓冲区写到磁盘中，包含已修改的 i-node、已延迟的块 I/O 和读写映射文件）</h4><h4 id="第3步：执行echo-3-gt-gt-proc-sys-vm-drop-caches-命令，将drop-caches值改成3。"><a href="#第3步：执行echo-3-gt-gt-proc-sys-vm-drop-caches-命令，将drop-caches值改成3。" class="headerlink" title="第3步：执行echo 3 &gt;&gt; /proc/sys/vm/drop_caches 命令，将drop_caches值改成3。"></a>第3步：执行echo 3 &gt;&gt; /proc/sys/vm/drop_caches 命令，将drop_caches值改成3。</h4><p>此时已经完成，可执行 free -m 命令查看是否生效。</p>
+<p><code>如图：</code><br><img src="/img/linux/2015-10-01-2011-linux-01.png"></p>
 
                 
             </div>
@@ -525,7 +506,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://raoys.github.io/2015/10/13/it-linux-centos-02/">https://raoys.github.io/2015/10/13/it-linux-centos-02/</a>
+                    <a href="https://raoys.github.io/2015/10/01/it-linux-03.html">https://raoys.github.io/2015/10/01/it-linux-03.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -563,12 +544,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/CentOS/">
-                                    <span class="chip bg-color">CentOS</span>
-                                </a>
-                            
-                                <a href="/tags/VMware/">
-                                    <span class="chip bg-color">VMware</span>
+                                <a href="/tags/Linux/">
+                                    <span class="chip bg-color">Linux</span>
                                 </a>
                             
                         </div>
@@ -742,13 +719,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2017/08/01/it-server-nginx-01/">
+                <a href="/2015/10/02/it-backend-zk-01.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Nginx监听一个端口多域名转发配置">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Zookeeper 集群搭建">
                         
-                        <span class="card-title">Nginx监听一个端口多域名转发配置</span>
+                        <span class="card-title">Zookeeper 集群搭建</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -759,14 +736,14 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2017年08月01日
+                            <i class="far fa-clock fa-fw icon-date"></i>2015年10月02日
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="post-category">
-                                    服务器
+                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
+                                    后端
                                 </a>
                             
                             
@@ -776,8 +753,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Nginx/">
-                        <span class="chip bg-color">Nginx</span>
+                    <a href="/tags/Zookeeper/">
+                        <span class="chip bg-color">Zookeeper</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%9B%86%E7%BE%A4/">
+                        <span class="chip bg-color">集群</span>
                     </a>
                     
                 </div>
@@ -791,13 +772,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2015/10/12/it-linux-centos-01/">
+                <a href="/2015/10/01/it-linux-02.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="CentOS开机网络启动设置问题">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Linux修改主机名称、DNS解析">
                         
-                        <span class="card-title">CentOS开机网络启动设置问题</span>
+                        <span class="card-title">Linux修改主机名称、DNS解析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -808,7 +789,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2015年10月12日
+                                <i class="far fa-clock fa-fw icon-date"></i>2015年10月01日
                             </span>
                         <span class="publish-author">
                             
@@ -825,8 +806,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/CentOS/">
-                        <span class="chip bg-color">CentOS</span>
+                    <a href="/tags/Linux/">
+                        <span class="chip bg-color">Linux</span>
                     </a>
                     
                 </div>
