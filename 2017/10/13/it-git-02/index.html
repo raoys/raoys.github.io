@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Linux修改主机名称、DNS解析, 饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
+    <meta name="keywords" content="git remote: HTTP Basic: Access denied 错误解决办法, 饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
     <meta name="description" content="饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Linux修改主机名称、DNS解析 | Jason Rao&#39;s Blog</title>
+    <title>git remote: HTTP Basic: Access denied 错误解决办法 | Jason Rao&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Linux修改主机名称、DNS解析</h1>
+                    <h1 class="description center-align post-title">git remote: HTTP Basic: Access denied 错误解决办法</h1>
                 </div>
             </div>
         </div>
@@ -431,8 +431,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Linux/">
-                                <span class="chip bg-color">Linux</span>
+                            <a href="/tags/Git/">
+                                <span class="chip bg-color">Git</span>
                             </a>
                         
                     </div>
@@ -443,8 +443,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Linux/" class="post-category">
-                                Linux
+                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
+                                后端
                             </a>
                         
                     </div>
@@ -456,7 +456,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2015-10-01
+                    2017-10-13
                 </div>
                 
 
@@ -477,15 +477,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><strong>Linux修改主机名称、DNS解析步骤</strong> </p>
-<h4 id="inux更改主机名称："><a href="#inux更改主机名称：" class="headerlink" title="inux更改主机名称："></a>inux更改主机名称：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">vi &#x2F;etc&#x2F;sysconfig&#x2F;network打开配置文件</span><br><span class="line"></span><br><span class="line">设置HOSTNAME&#x3D;hadoop(自己想更改的名称)</span><br><span class="line"></span><br><span class="line">退出保存即可</span><br><span class="line"></span><br><span class="line">测试：重启机器</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+                <p><strong>问题描述</strong> </p>
+<ul>
+<li>git push or git clone 报 HTTP Basic: Access denied 错误</li>
+</ul>
+<h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><pre><code>本地git配置的用户名、密码与gitlabs上注册的用户名、密码不一致。
 
-<h4 id="设置DNS域名解析："><a href="#设置DNS域名解析：" class="headerlink" title="设置DNS域名解析："></a>设置DNS域名解析：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">vi &#x2F;etc&#x2F;hosts打开配置文件</span><br><span class="line"></span><br><span class="line">在最后加入：ip地址 域名称（192.168.110.101 hadoop）</span><br><span class="line"></span><br><span class="line">保存退出即可</span><br><span class="line"></span><br><span class="line">测试：ping hadoop</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h4 id="设置ip地址："><a href="#设置ip地址：" class="headerlink" title="设置ip地址："></a>设置ip地址：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">查看ip地址：ifconfig</span><br><span class="line"></span><br><span class="line">修改ip地址：vi &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-eth0 打开配置文件</span><br><span class="line"></span><br><span class="line">设置ip地址，网关、域名等</span><br><span class="line"></span><br><span class="line">保存退出，执行命令：service network restart</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
+ 
+</code></pre>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 如果账号密码有变动 用这个命令：</span><br><span class="line">    git config –-system –-unset credential.helper </span><br><span class="line">    </span><br><span class="line">    然后重新输入账号密码 应该就能解决了；</span><br><span class="line">    </span><br><span class="line">2. 如果用了第一个命令 还不能解决问题那么 用这个命令：</span><br><span class="line">    git config –-global http.emptyAuth true</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
                 
             </div>
@@ -512,7 +512,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://raoys.github.io/2015/10/01/it-linux-02.html">https://raoys.github.io/2015/10/01/it-linux-02.html</a>
+                    <a href="https://raoys.github.io/2017/10/13/it-git-02/">https://raoys.github.io/2017/10/13/it-git-02/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -550,8 +550,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Linux/">
-                                    <span class="chip bg-color">Linux</span>
+                                <a href="/tags/Git/">
+                                    <span class="chip bg-color">Git</span>
                                 </a>
                             
                         </div>
@@ -725,13 +725,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2015/10/01/it-linux-03.html">
+                <a href="/2018/09/01/it-python-01/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Linux下如何释放cache内存(drop_caches)">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="如何让Python pip使用国内镜像体验飞一样的速度">
                         
-                        <span class="card-title">Linux下如何释放cache内存(drop_caches)</span>
+                        <span class="card-title">如何让Python pip使用国内镜像体验飞一样的速度</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -742,14 +742,14 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2015年10月01日
+                            <i class="far fa-clock fa-fw icon-date"></i>2018年09月01日
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Linux/" class="post-category">
-                                    Linux
+                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
+                                    后端
                                 </a>
                             
                             
@@ -759,8 +759,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Linux/">
-                        <span class="chip bg-color">Linux</span>
+                    <a href="/tags/Python/">
+                        <span class="chip bg-color">Python</span>
                     </a>
                     
                 </div>
@@ -774,13 +774,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2015/10/01/it-linux-01.html">
+                <a href="/2017/10/13/it-redis-01/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Linux下关闭防火墙">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Redis工具类对各种数据类型的操作">
                         
-                        <span class="card-title">Linux下关闭防火墙</span>
+                        <span class="card-title">Redis工具类对各种数据类型的操作</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -791,14 +791,14 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2015年10月01日
+                                <i class="far fa-clock fa-fw icon-date"></i>2017年10月13日
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Linux/" class="post-category">
-                                    Linux
+                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
+                                    后端
                                 </a>
                             
                             
@@ -808,8 +808,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Linux/">
-                        <span class="chip bg-color">Linux</span>
+                    <a href="/tags/Redis/">
+                        <span class="chip bg-color">Redis</span>
                     </a>
                     
                 </div>
