@@ -29,7 +29,9 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
 
 
 
@@ -476,29 +478,115 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
 
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p><strong>如近分布式架构常用到Zookeeper组建，下面来介绍下Zookeeper集群的搭建方法</strong> </p>
-<h4 id="第一步：下载并上传zookeeper-3-4-6-tar-gz到各个服务器的-usr-local-目录-或者使用wget命令"><a href="#第一步：下载并上传zookeeper-3-4-6-tar-gz到各个服务器的-usr-local-目录-或者使用wget命令" class="headerlink" title="第一步：下载并上传zookeeper-3.4.6.tar.gz到各个服务器的/usr/local/目录,或者使用wget命令"></a>第一步：下载并上传zookeeper-3.4.6.tar.gz到各个服务器的/usr/local/目录,或者使用wget命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;</span><br><span class="line">wget http:&#x2F;&#x2F;apache.fayea.com&#x2F;zookeeper&#x2F;zookeeper-3.4.6&#x2F;zookeeper-3.4.6.tar.gz</span><br><span class="line">tar -zxvf zookeeper-3.4.6.tar.gz</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第一步：下载并上传zookeeper-3-4-6-tar-gz到各个服务器的-usr-local-目录-或者使用wget命令"><a href="#第一步：下载并上传zookeeper-3-4-6-tar-gz到各个服务器的-usr-local-目录-或者使用wget命令" class="headerlink" title="第一步：下载并上传zookeeper-3.4.6.tar.gz到各个服务器的/usr/local/目录,或者使用wget命令"></a>第一步：下载并上传zookeeper-3.4.6.tar.gz到各个服务器的/usr/local/目录,或者使用wget命令</h4><pre class="line-numbers language-none"><code class="language-none">cd /usr/local/
+wget http://apache.fayea.com/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
+tar -zxvf zookeeper-3.4.6.tar.gz
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="第二步：在各个服务器上解压zookeeper安装包，并按节点号对zookeeper目录重命名"><a href="#第二步：在各个服务器上解压zookeeper安装包，并按节点号对zookeeper目录重命名" class="headerlink" title="第二步：在各个服务器上解压zookeeper安装包，并按节点号对zookeeper目录重命名"></a>第二步：在各个服务器上解压zookeeper安装包，并按节点号对zookeeper目录重命名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 服务器1</span><br><span class="line">cp -r zookeeper-3.4.6 zookeeper-3.4.6_1</span><br><span class="line"># 服务器2</span><br><span class="line">cp -r zookeeper-3.4.6 zookeeper-3.4.6_2</span><br><span class="line"># 服务器3</span><br><span class="line">cp -r zookeeper-3.4.6 zookeeper-3.4.6_3</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第二步：在各个服务器上解压zookeeper安装包，并按节点号对zookeeper目录重命名"><a href="#第二步：在各个服务器上解压zookeeper安装包，并按节点号对zookeeper目录重命名" class="headerlink" title="第二步：在各个服务器上解压zookeeper安装包，并按节点号对zookeeper目录重命名"></a>第二步：在各个服务器上解压zookeeper安装包，并按节点号对zookeeper目录重命名</h4><pre class="line-numbers language-none"><code class="language-none"># 服务器1
+cp -r zookeeper-3.4.6 zookeeper-3.4.6_1
+# 服务器2
+cp -r zookeeper-3.4.6 zookeeper-3.4.6_2
+# 服务器3
+cp -r zookeeper-3.4.6 zookeeper-3.4.6_3
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="第三步：在各zookeeper节点目录下创建以下目录"><a href="#第三步：在各zookeeper节点目录下创建以下目录" class="headerlink" title="第三步：在各zookeeper节点目录下创建以下目录"></a>第三步：在各zookeeper节点目录下创建以下目录</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1</span><br><span class="line">mkdir data</span><br><span class="line">mkdir logs</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2</span><br><span class="line">mkdir data</span><br><span class="line">mkdir logs</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3</span><br><span class="line">mkdir data</span><br><span class="line">mkdir logs</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第三步：在各zookeeper节点目录下创建以下目录"><a href="#第三步：在各zookeeper节点目录下创建以下目录" class="headerlink" title="第三步：在各zookeeper节点目录下创建以下目录"></a>第三步：在各zookeeper节点目录下创建以下目录</h4><pre class="line-numbers language-none"><code class="language-none">cd /usr/local/zookeeper-3.4.6_1
+mkdir data
+mkdir logs
+cd /usr/local/zookeeper-3.4.6_2
+mkdir data
+mkdir logs
+cd /usr/local/zookeeper-3.4.6_3
+mkdir data
+mkdir logs
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="第四步：将各节点zookeeper-zookeeper-3-4-6-x-conf目录下的zoo-sample-cfg文件拷贝一份，命名为zoo-cfg"><a href="#第四步：将各节点zookeeper-zookeeper-3-4-6-x-conf目录下的zoo-sample-cfg文件拷贝一份，命名为zoo-cfg" class="headerlink" title="第四步：将各节点zookeeper/zookeeper-3.4.6_x/conf目录下的zoo_sample.cfg文件拷贝一份，命名为zoo.cfg"></a>第四步：将各节点zookeeper/zookeeper-3.4.6_x/conf目录下的zoo_sample.cfg文件拷贝一份，命名为zoo.cfg</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1&#x2F;conf</span><br><span class="line">cp zoo_sample.cfg zoo.cfg</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2&#x2F;conf</span><br><span class="line">cp zoo_sample.cfg zoo.cfg</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3&#x2F;conf</span><br><span class="line">cp zoo_sample.cfg zoo.cfg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第四步：将各节点zookeeper-zookeeper-3-4-6-x-conf目录下的zoo-sample-cfg文件拷贝一份，命名为zoo-cfg"><a href="#第四步：将各节点zookeeper-zookeeper-3-4-6-x-conf目录下的zoo-sample-cfg文件拷贝一份，命名为zoo-cfg" class="headerlink" title="第四步：将各节点zookeeper/zookeeper-3.4.6_x/conf目录下的zoo_sample.cfg文件拷贝一份，命名为zoo.cfg"></a>第四步：将各节点zookeeper/zookeeper-3.4.6_x/conf目录下的zoo_sample.cfg文件拷贝一份，命名为zoo.cfg</h4><pre class="line-numbers language-none"><code class="language-none">cd /usr/local/zookeeper-3.4.6_1/conf
+cp zoo_sample.cfg zoo.cfg
+cd /usr/local/zookeeper-3.4.6_2/conf
+cp zoo_sample.cfg zoo.cfg
+cd /usr/local/zookeeper-3.4.6_3/conf
+cp zoo_sample.cfg zoo.cfg
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="第五步：修改-zoo-cfg-配置文件"><a href="#第五步：修改-zoo-cfg-配置文件" class="headerlink" title="第五步：修改 zoo.cfg 配置文件"></a>第五步：修改 zoo.cfg 配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1&#x2F;conf</span><br><span class="line"># 设置内容如下：</span><br><span class="line">tickTime&#x3D;2000</span><br><span class="line">initLimit&#x3D;10</span><br><span class="line">syncLimit&#x3D;5</span><br><span class="line">dataDir&#x3D;&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1&#x2F;data</span><br><span class="line">dataLogDir&#x3D;&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1&#x2F;logs</span><br><span class="line">clientPort&#x3D;2181</span><br><span class="line">server.1&#x3D;127.0.0.1:2881:3881</span><br><span class="line">server.2&#x3D;127.0.0.1:2882:3882</span><br><span class="line">server.3&#x3D;127.0.0.1:2883:3883</span><br><span class="line"># -----------------------------------</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2&#x2F;conf</span><br><span class="line">vi zoo.cfg</span><br><span class="line"># 设置内容如下：</span><br><span class="line">tickTime&#x3D;2000</span><br><span class="line">initLimit&#x3D;10</span><br><span class="line">syncLimit&#x3D;5</span><br><span class="line">dataDir&#x3D;&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2&#x2F;data</span><br><span class="line">dataLogDir&#x3D;&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2&#x2F;logs</span><br><span class="line">clientPort&#x3D;2182</span><br><span class="line">server.1&#x3D;127.0.0.1:2881:3881</span><br><span class="line">server.2&#x3D;127.0.0.1:2882:3882</span><br><span class="line">server.3&#x3D;127.0.0.1:2883:3883</span><br><span class="line"># -----------------------------------</span><br><span class="line">cd &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3&#x2F;conf</span><br><span class="line">vi zoo.cfg</span><br><span class="line"># 设置内容如下：</span><br><span class="line">tickTime&#x3D;2000</span><br><span class="line">initLimit&#x3D;10</span><br><span class="line">syncLimit&#x3D;5</span><br><span class="line">dataDir&#x3D;&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3&#x2F;data</span><br><span class="line">dataLogDir&#x3D;&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3&#x2F;logs</span><br><span class="line">clientPort&#x3D;2183</span><br><span class="line">server.1&#x3D;127.0.0.1:2881:3881</span><br><span class="line">server.2&#x3D;127.0.0.1:2882:3882</span><br><span class="line">server.3&#x3D;127.0.0.1:2883:3883</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第五步：修改-zoo-cfg-配置文件"><a href="#第五步：修改-zoo-cfg-配置文件" class="headerlink" title="第五步：修改 zoo.cfg 配置文件"></a>第五步：修改 zoo.cfg 配置文件</h4><pre class="line-numbers language-none"><code class="language-none">cd /usr/local/zookeeper-3.4.6_1/conf
+# 设置内容如下：
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/usr/local/zookeeper-3.4.6_1/data
+dataLogDir=/usr/local/zookeeper-3.4.6_1/logs
+clientPort=2181
+server.1=127.0.0.1:2881:3881
+server.2=127.0.0.1:2882:3882
+server.3=127.0.0.1:2883:3883
+# -----------------------------------
+cd /usr/local/zookeeper-3.4.6_2/conf
+vi zoo.cfg
+# 设置内容如下：
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/usr/local/zookeeper-3.4.6_2/data
+dataLogDir=/usr/local/zookeeper-3.4.6_2/logs
+clientPort=2182
+server.1=127.0.0.1:2881:3881
+server.2=127.0.0.1:2882:3882
+server.3=127.0.0.1:2883:3883
+# -----------------------------------
+cd /usr/local/zookeeper-3.4.6_3/conf
+vi zoo.cfg
+# 设置内容如下：
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/usr/local/zookeeper-3.4.6_3/data
+dataLogDir=/usr/local/zookeeper-3.4.6_3/logs
+clientPort=2183
+server.1=127.0.0.1:2881:3881
+server.2=127.0.0.1:2882:3882
+server.3=127.0.0.1:2883:3883
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="第六步：在dataDir-usr-local-zookeeper-3-4-6-x-data下创建-myid-文件"><a href="#第六步：在dataDir-usr-local-zookeeper-3-4-6-x-data下创建-myid-文件" class="headerlink" title="第六步：在dataDir=/usr/local/zookeeper-3.4.6_x/data下创建 myid 文件"></a>第六步：在dataDir=/usr/local/zookeeper-3.4.6_x/data下创建 myid 文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1&#x2F;data&#x2F;myid #设置值为1</span><br><span class="line">vi &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2&#x2F;data&#x2F;myid #设置值为2</span><br><span class="line">vi &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3&#x2F;data&#x2F;myid #设置值为3</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第六步：在dataDir-usr-local-zookeeper-3-4-6-x-data下创建-myid-文件"><a href="#第六步：在dataDir-usr-local-zookeeper-3-4-6-x-data下创建-myid-文件" class="headerlink" title="第六步：在dataDir=/usr/local/zookeeper-3.4.6_x/data下创建 myid 文件"></a>第六步：在dataDir=/usr/local/zookeeper-3.4.6_x/data下创建 myid 文件</h4><pre class="line-numbers language-none"><code class="language-none">vi /usr/local/zookeeper-3.4.6_1/data/myid #设置值为1
+vi /usr/local/zookeeper-3.4.6_2/data/myid #设置值为2
+vi /usr/local/zookeeper-3.4.6_3/data/myid #设置值为3
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="第七步：启动并查看zookeeper"><a href="#第七步：启动并查看zookeeper" class="headerlink" title="第七步：启动并查看zookeeper"></a>第七步：启动并查看zookeeper</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1&#x2F;bin&#x2F;zkServer.sh start</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2&#x2F;bin&#x2F;zkServer.sh start</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3&#x2F;bin&#x2F;zkServer.sh start</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第七步：启动并查看zookeeper"><a href="#第七步：启动并查看zookeeper" class="headerlink" title="第七步：启动并查看zookeeper"></a>第七步：启动并查看zookeeper</h4><pre class="line-numbers language-none"><code class="language-none">cd /usr/local
+/usr/local/zookeeper-3.4.6_1/bin/zkServer.sh start
+/usr/local/zookeeper-3.4.6_2/bin/zkServer.sh start
+/usr/local/zookeeper-3.4.6_3/bin/zkServer.sh start
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="第八步：验证zookeeper启动情况"><a href="#第八步：验证zookeeper启动情况" class="headerlink" title="第八步：验证zookeeper启动情况"></a>第八步：验证zookeeper启动情况</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1&#x2F;bin&#x2F;zkServer.sh status</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2&#x2F;bin&#x2F;zkServer.sh status</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3&#x2F;bin&#x2F;zkServer.sh status</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第八步：验证zookeeper启动情况"><a href="#第八步：验证zookeeper启动情况" class="headerlink" title="第八步：验证zookeeper启动情况"></a>第八步：验证zookeeper启动情况</h4><pre class="line-numbers language-none"><code class="language-none">/usr/local/zookeeper-3.4.6_1/bin/zkServer.sh status
+/usr/local/zookeeper-3.4.6_2/bin/zkServer.sh status
+/usr/local/zookeeper-3.4.6_3/bin/zkServer.sh status
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="第九步：如果启动成功，三台机器结果类似如下-标红部分为一个leader-两个follower"><a href="#第九步：如果启动成功，三台机器结果类似如下-标红部分为一个leader-两个follower" class="headerlink" title="第九步：如果启动成功，三台机器结果类似如下,标红部分为一个leader,两个follower"></a>第九步：如果启动成功，三台机器结果类似如下,标红部分为一个leader,两个follower</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 local]# &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1&#x2F;bin&#x2F;zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_1&#x2F;bin&#x2F;..&#x2F;conf&#x2F;zoo.cfg</span><br><span class="line">Mode: &quot;follower&quot;</span><br><span class="line">[root@centos7 local]# &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2&#x2F;bin&#x2F;zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_2&#x2F;bin&#x2F;..&#x2F;conf&#x2F;zoo.cfg</span><br><span class="line">Mode: &quot;leader&quot;</span><br><span class="line">[root@centos7 local]# &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3&#x2F;bin&#x2F;zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: &#x2F;usr&#x2F;local&#x2F;zookeeper-3.4.6_3&#x2F;bin&#x2F;..&#x2F;conf&#x2F;zoo.cfg</span><br><span class="line">Mode: &quot;follower&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="第九步：如果启动成功，三台机器结果类似如下-标红部分为一个leader-两个follower"><a href="#第九步：如果启动成功，三台机器结果类似如下-标红部分为一个leader-两个follower" class="headerlink" title="第九步：如果启动成功，三台机器结果类似如下,标红部分为一个leader,两个follower"></a>第九步：如果启动成功，三台机器结果类似如下,标红部分为一个leader,两个follower</h4><pre class="line-numbers language-none"><code class="language-none">[root@centos7 local]# /usr/local/zookeeper-3.4.6_1/bin/zkServer.sh status
+JMX enabled by default
+Using config: /usr/local/zookeeper-3.4.6_1/bin/../conf/zoo.cfg
+Mode: "follower"
+[root@centos7 local]# /usr/local/zookeeper-3.4.6_2/bin/zkServer.sh status
+JMX enabled by default
+Using config: /usr/local/zookeeper-3.4.6_2/bin/../conf/zoo.cfg
+Mode: "leader"
+[root@centos7 local]# /usr/local/zookeeper-3.4.6_3/bin/zkServer.sh status
+JMX enabled by default
+Using config: /usr/local/zookeeper-3.4.6_3/bin/../conf/zoo.cfg
+Mode: "follower"
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>此时zookeeper集群搭建成功。</p>
 
                 
@@ -727,6 +815,269 @@
     
 
     
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'Ti4gaJ8rOTxCnIw4OiEinyYD-gzGzoHsz',
+        appKey: 'k6GNNvGmI3Hba5mQOz43N5nA',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'just go go'
+    });
+</script>
 
     
 

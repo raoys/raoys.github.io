@@ -29,7 +29,9 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
 
 
 
@@ -478,7 +480,10 @@
                             <div class="summary block-with-text">
                                 
                                     Nginx负载均衡之权重配置 
-配置如下：1234567891011121314151617181920212223242526272829303132333435user  www www;   ##nginx以www用户身份运行，需要建
+配置如下：user  www www;   ##nginx以www用户身份运行，需要建立www用户
+worker_processes  1;  ##工作进程，一般设置为auto自动
+
+#error_log  
                                 
                             </div>
                             <div class="publish-info">
@@ -540,14 +545,14 @@
                                     Nginx监听一个端口多域名转发配置方法 
 配置如下：worker_processes  1;
 
-events &#123;
+events {
 
     worker_connections  1024;
 
-&#125;
+}
 
-http &#123;
-    i
+http {
+    include       mi
                                 
                             </div>
                             <div class="publish-info">

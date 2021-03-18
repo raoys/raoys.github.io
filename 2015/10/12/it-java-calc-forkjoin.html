@@ -29,7 +29,9 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
 
 
 
@@ -472,6 +474,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
 
@@ -496,11 +501,14 @@
 <li><p>2个构造方法</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ForkJoinPool(int parallelism)  创建一个包含parallelism个并行线程的ForkJoinPool。</span><br><span class="line">ForkJoinPool()  以Runtime.availableProcessors()方法的返回值作为parallelism参数来创建ForkJoinPool。</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">ForkJoinPool(int parallelism)  创建一个包含parallelism个并行线程的ForkJoinPool。
+ForkJoinPool()  以Runtime.availableProcessors()方法的返回值作为parallelism参数来创建ForkJoinPool。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
 <li>3种方式启动</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">异步执行        　 execute(ForkJoinTask)    　　　　 ForkJoinTask.fork</span><br><span class="line">等待获取结果    　　invoke(ForkJoinTask)    　　　　  ForkJoinTask.invoke</span><br><span class="line">执行,获取Future    submit(ForkJoinTask)  　　　　　　ForkJoinTask.fork(ForkJoinTask are Futures)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">异步执行        　 execute(ForkJoinTask)    　　　　 ForkJoinTask.fork
+等待获取结果    　　invoke(ForkJoinTask)    　　　　  ForkJoinTask.invoke
+执行,获取Future    submit(ForkJoinTask)  　　　　　　ForkJoinTask.fork(ForkJoinTask are Futures)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -512,31 +520,180 @@
 <li><p>getException方法返回Throwable对象，如果任务被取消了则返回CancellationException。如果任务没有完成或者没有抛出异常则返回null。</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if(task.isCompletedAbnormally()) &#123;</span><br><span class="line">    System.out.println(task.getException());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">if(task.isCompletedAbnormally()) {
+    System.out.println(task.getException());
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p> <strong>e、代码展示</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">import java.util.concurrent.ForkJoinPool</span><br><span class="line">import java.util.concurrent.ForkJoinTask</span><br><span class="line">import java.util.concurrent.RecursiveTask</span><br><span class="line">&#x2F;**</span><br><span class="line"> * fork</span><br><span class="line"> * 对一个大数组进行并行求和的RecursiveTask</span><br><span class="line"> *</span><br><span class="line"> * 大任务可以拆成小任务，小任务还可以继续拆成更小的任务，最后把任务的结果汇总合并，得到最终结果，这种模型就是Fork&#x2F;Join模型。</span><br><span class="line"> Java7引入了Fork&#x2F;Join框架，我们通过RecursiveTask这个类就可以方便地实现Fork&#x2F;Join模式。</span><br><span class="line"> * Created by wenbronk on 2017&#x2F;7&#x2F;13.</span><br><span class="line"> *&#x2F;</span><br><span class="line">class ForkJoinTest extends RecursiveTask&lt;Long&gt; &#123;</span><br><span class="line"></span><br><span class="line">    static final int THRESHOLD &#x3D; 100</span><br><span class="line">    long[] array</span><br><span class="line">    int start</span><br><span class="line">    int end</span><br><span class="line"></span><br><span class="line">    ForkJoinTest(long[] array, int start, int end) &#123;</span><br><span class="line">        this.start &#x3D; start</span><br><span class="line">        this.end &#x3D; end</span><br><span class="line">        this.array &#x3D; array</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    protected Long compute() &#123;</span><br><span class="line"></span><br><span class="line">        if (end - start &lt; THRESHOLD) &#123;</span><br><span class="line">            long sum &#x3D; 0</span><br><span class="line">            for (int i &#x3D; start; i &lt; end; i++) &#123;</span><br><span class="line">                sum +&#x3D; array[i]</span><br><span class="line">            &#125;</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep(100)</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace()</span><br><span class="line">            &#125;</span><br><span class="line">            println String.format(&#39;compute %d %d &#x3D; %d&#39;, start, end, sum)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 对于大任务, 分多线程执行</span><br><span class="line">        int middle &#x3D; (end + start) &#x2F; 2</span><br><span class="line">        println String.format(&#39;split %d %d &#x3D;&gt; %d %d, %d %d&#39;, start, end, start, middle, middle, end)</span><br><span class="line"></span><br><span class="line">        def subtask1 &#x3D; new ForkJoinTest(this.array, start, middle);</span><br><span class="line">        def subtask2 &#x3D; new ForkJoinTest(this.array, middle, end);</span><br><span class="line">        invokeAll(subtask1, subtask2)</span><br><span class="line"></span><br><span class="line">        Long subresult1 &#x3D; subtask1.join()</span><br><span class="line">        Long subresult2 &#x3D; subtask2.join()</span><br><span class="line"></span><br><span class="line">        Long result &#x3D; subresult1 + subresult2</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;result &#x3D; &quot; + subresult1 + &quot; + &quot; + subresult2 + &quot; &#x3D;&#x3D;&gt; &quot; + result);</span><br><span class="line">        return result</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        &#x2F;&#x2F; 创建随机数组成的数组:</span><br><span class="line">        long[] array &#x3D; new long[400];</span><br><span class="line">&#x2F;&#x2F;        fillRandom(array);</span><br><span class="line">        &#x2F;&#x2F; fork&#x2F;join task:</span><br><span class="line">        ForkJoinPool fjp &#x3D; new ForkJoinPool(4); &#x2F;&#x2F; 最大并发数4</span><br><span class="line">        ForkJoinTask&lt;Long&gt; task &#x3D; new ForkJoinTest(array, 0, array.length);</span><br><span class="line">        long startTime &#x3D; System.currentTimeMillis();</span><br><span class="line">        Long result &#x3D; fjp.invoke(task);</span><br><span class="line">        long endTime &#x3D; System.currentTimeMillis();</span><br><span class="line">        System.out.println(&quot;Fork&#x2F;join sum: &quot; + result + &quot; in &quot; + (endTime - startTime) + &quot; ms.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">import java.util.concurrent.ForkJoinPool
+import java.util.concurrent.ForkJoinTask
+import java.util.concurrent.RecursiveTask
+/**
+ * fork
+ * 对一个大数组进行并行求和的RecursiveTask
+ *
+ * 大任务可以拆成小任务，小任务还可以继续拆成更小的任务，最后把任务的结果汇总合并，得到最终结果，这种模型就是Fork/Join模型。
+ Java7引入了Fork/Join框架，我们通过RecursiveTask这个类就可以方便地实现Fork/Join模式。
+ * Created by wenbronk on 2017/7/13.
+ */
+class ForkJoinTest extends RecursiveTask&lt;Long&gt; {
+
+    static final int THRESHOLD = 100
+    long[] array
+    int start
+    int end
+
+    ForkJoinTest(long[] array, int start, int end) {
+        this.start = start
+        this.end = end
+        this.array = array
+    }
+    @Override
+    protected Long compute() {
+
+        if (end - start &lt; THRESHOLD) {
+            long sum = 0
+            for (int i = start; i &lt; end; i++) {
+                sum += array[i]
+            }
+            try {
+                Thread.sleep(100)
+            } catch (Exception e) {
+                e.printStackTrace()
+            }
+            println String.format('compute %d %d = %d', start, end, sum)
+        }
+
+        // 对于大任务, 分多线程执行
+        int middle = (end + start) / 2
+        println String.format('split %d %d =&gt; %d %d, %d %d', start, end, start, middle, middle, end)
+
+        def subtask1 = new ForkJoinTest(this.array, start, middle);
+        def subtask2 = new ForkJoinTest(this.array, middle, end);
+        invokeAll(subtask1, subtask2)
+
+        Long subresult1 = subtask1.join()
+        Long subresult2 = subtask2.join()
+
+        Long result = subresult1 + subresult2
+
+        System.out.println("result = " + subresult1 + " + " + subresult2 + " ==&gt; " + result);
+        return result
+    }
+
+    public static void main(String[] args) throws Exception {
+        // 创建随机数组成的数组:
+        long[] array = new long[400];
+//        fillRandom(array);
+        // fork/join task:
+        ForkJoinPool fjp = new ForkJoinPool(4); // 最大并发数4
+        ForkJoinTask&lt;Long&gt; task = new ForkJoinTest(array, 0, array.length);
+        long startTime = System.currentTimeMillis();
+        Long result = fjp.invoke(task);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Fork/join sum: " + result + " in " + (endTime - startTime) + " ms.");
+    }
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p> <strong>f、java代码的实现</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">package com.doordu.pingan.demo;</span><br><span class="line"></span><br><span class="line">import java.util.concurrent.ExecutionException;</span><br><span class="line">import java.util.concurrent.ForkJoinPool;</span><br><span class="line">import java.util.concurrent.ForkJoinTask;</span><br><span class="line">import java.util.concurrent.RecursiveTask;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * forkjoin的简单易用</span><br><span class="line"> * Created by wenbronk on 2017&#x2F;7&#x2F;26.</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class CountTask extends RecursiveTask&lt;Integer&gt;&#123;</span><br><span class="line">    private volatile static int count &#x3D; 0;</span><br><span class="line">    private int start;</span><br><span class="line">    private int end;</span><br><span class="line"></span><br><span class="line">    public CountTask(int start, int end) &#123;</span><br><span class="line">        this.start &#x3D; start;</span><br><span class="line">        this.end &#x3D; end;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static final int threadhold &#x3D; 2;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected Integer compute() &#123;</span><br><span class="line">        int sum &#x3D; 0;</span><br><span class="line">        System.out.println(&quot;开启了一条线程单独干: &quot; + count++);</span><br><span class="line">        &#x2F;&#x2F; 如果任务足够小, 就直接执行</span><br><span class="line">        boolean canCompute &#x3D; (end - start) &lt;&#x3D; threadhold;</span><br><span class="line">        if (canCompute) &#123;</span><br><span class="line">            for (int i &#x3D; start; i &lt;&#x3D; end; i++) &#123;</span><br><span class="line">                sum +&#x3D; i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            &#x2F;&#x2F;任务大于阈值, 分裂为2个任务</span><br><span class="line">            int middle &#x3D; (start + end) &#x2F; 2;</span><br><span class="line">            CountTask countTask1 &#x3D; new CountTask(start, middle);</span><br><span class="line">            CountTask countTask2 &#x3D; new CountTask(middle + 1, end);</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 开启线程</span><br><span class="line">&#x2F;&#x2F;            countTask1.fork();</span><br><span class="line">&#x2F;&#x2F;            countTask2.fork();</span><br><span class="line">            invokeAll(countTask1, countTask2);</span><br><span class="line"></span><br><span class="line">            Integer join1 &#x3D; countTask1.join();</span><br><span class="line">            Integer join2 &#x3D; countTask2.join();</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 结果合并</span><br><span class="line">            sum &#x3D; join1 + join2;</span><br><span class="line">        &#125;</span><br><span class="line">        return sum;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 测试</span><br><span class="line">    public static void main(String[] args) throws ExecutionException, InterruptedException &#123;</span><br><span class="line">        ForkJoinPool forkJoinPool &#x3D; new ForkJoinPool();</span><br><span class="line"></span><br><span class="line">        CountTask countTask &#x3D; new CountTask(1, 100);</span><br><span class="line">        ForkJoinTask&lt;Integer&gt; result &#x3D; forkJoinPool.submit(countTask);</span><br><span class="line">        System.out.println(result.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">package com.doordu.pingan.demo;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.RecursiveTask;
+
+/**
+ * forkjoin的简单易用
+ * Created by wenbronk on 2017/7/26.
+ */
+public class CountTask extends RecursiveTask&lt;Integer&gt;{
+    private volatile static int count = 0;
+    private int start;
+    private int end;
+
+    public CountTask(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    public static final int threadhold = 2;
+
+    @Override
+    protected Integer compute() {
+        int sum = 0;
+        System.out.println("开启了一条线程单独干: " + count++);
+        // 如果任务足够小, 就直接执行
+        boolean canCompute = (end - start) &lt;= threadhold;
+        if (canCompute) {
+            for (int i = start; i &lt;= end; i++) {
+                sum += i;
+            }
+        }else {
+            //任务大于阈值, 分裂为2个任务
+            int middle = (start + end) / 2;
+            CountTask countTask1 = new CountTask(start, middle);
+            CountTask countTask2 = new CountTask(middle + 1, end);
+
+            // 开启线程
+//            countTask1.fork();
+//            countTask2.fork();
+            invokeAll(countTask1, countTask2);
+
+            Integer join1 = countTask1.join();
+            Integer join2 = countTask2.join();
+
+            // 结果合并
+            sum = join1 + join2;
+        }
+        return sum;
+    }
+
+
+    // 测试
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+
+        CountTask countTask = new CountTask(1, 100);
+        ForkJoinTask&lt;Integer&gt; result = forkJoinPool.submit(countTask);
+        System.out.println(result.get());
+    }
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p> <strong>g、work-stealing</strong></p>
 <ul>
 <li>g-1 forkjoin 框架是有 work-steal 机制的，这个机制主要功能是：<br><code>“空闲的” worker thread 从其它 worker thread 的 workQueue 里取得“未执行”的 task 然后执行。</code></li>
 <li>g-2 具体细节机制如下：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1、每个 worker thread 维护自己的 scheduling 队列中的“可运行的”task - 队列是一个双向队列（称作：deques），支持 LIFO 和 FIFO 操作。</span><br><span class="line">2、在task 中生成的“子task”，会被放进生成它的 task 所在的 worker thread 的 双向队列。</span><br><span class="line">3、worker thread 处理双向队列中的 task 时，使用的是 LIFO 规则（最后进来的，最先被处理）</span><br><span class="line">4、当worker thread 的队列时没有任务可执行时，它会随机地偷取别的 worker thread 的 work queue 里的 task，然后执行它。在偷取时，使用的是 FIFO 规则，即偷取别人队列里“最先进入”队列的 task。</span><br><span class="line">5、当 worker thread 执行时，遇到了一个join操作（例如：newTask.join），它会暂停当前的 task </span><br><span class="line">的处理，而来处理这个join操作所要执行的任务内容。直到这个join操作的任务执行完后，才会返回刚才暂停任务，继续执行被暂停任务的其它内容。所有 task 都会在不进行“阻塞”情况下完成。 </span><br><span class="line">（这里的“阻塞”的意思，个人理解为不是IO操作的那种阻塞，而是在任务调试时，没有具体的“阻塞”处理（例如：ArrayBlockingQueue的那种阻塞），或是没有用“阻塞的方式”进行任务调度）</span><br><span class="line"></span><br><span class="line">之前以为每次调用 fork 方法，都会生成一个线程，看了源码和进行Debug后才知道：根据构造函数中的parallelism值来，决定是否启动新线程。 </span><br><span class="line">在 fork 方法中，((ForkJoinWorkerThread)t).workQueue.push(this)这语句会把任务加到“当前线程的workQueue”里，进行排队。然后调用signalWork方法，来看是否还可以启动新线程来处理“未分配任务”。如果可以，就启动新线程处理任务。</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">1、每个 worker thread 维护自己的 scheduling 队列中的“可运行的”task - 队列是一个双向队列（称作：deques），支持 LIFO 和 FIFO 操作。
+2、在task 中生成的“子task”，会被放进生成它的 task 所在的 worker thread 的 双向队列。
+3、worker thread 处理双向队列中的 task 时，使用的是 LIFO 规则（最后进来的，最先被处理）
+4、当worker thread 的队列时没有任务可执行时，它会随机地偷取别的 worker thread 的 work queue 里的 task，然后执行它。在偷取时，使用的是 FIFO 规则，即偷取别人队列里“最先进入”队列的 task。
+5、当 worker thread 执行时，遇到了一个join操作（例如：newTask.join），它会暂停当前的 task 
+的处理，而来处理这个join操作所要执行的任务内容。直到这个join操作的任务执行完后，才会返回刚才暂停任务，继续执行被暂停任务的其它内容。所有 task 都会在不进行“阻塞”情况下完成。 
+（这里的“阻塞”的意思，个人理解为不是IO操作的那种阻塞，而是在任务调试时，没有具体的“阻塞”处理（例如：ArrayBlockingQueue的那种阻塞），或是没有用“阻塞的方式”进行任务调度）
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当 worker thread 没有要执行的 task 或者偷取任务失败时，就会进行暂时等待处理（通过yield，sleep，或者调整优先度等方式），过一段时间再重试看看有没有任务可以执行。如果所有的 worker thread 都处于闲置状态， </span><br><span class="line">等待上层的发送 task 过来的话，就不会进行重试（看是否有任务可以执行）。</span><br></pre></td></tr></table></figure>
+之前以为每次调用 fork 方法，都会生成一个线程，看了源码和进行Debug后才知道：根据构造函数中的parallelism值来，决定是否启动新线程。 
+在 fork 方法中，((ForkJoinWorkerThread)t).workQueue.push(this)这语句会把任务加到“当前线程的workQueue”里，进行排队。然后调用signalWork方法，来看是否还可以启动新线程来处理“未分配任务”。如果可以，就启动新线程处理任务。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">当 worker thread 没有要执行的 task 或者偷取任务失败时，就会进行暂时等待处理（通过yield，sleep，或者调整优先度等方式），过一段时间再重试看看有没有任务可以执行。如果所有的 worker thread 都处于闲置状态， 
+等待上层的发送 task 过来的话，就不会进行重试（看是否有任务可以执行）。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
 <li>g-3 work-stealing的“LIFO和FIFO”处理方式有两点好处：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、减少了取 task 时的竞争。worker thread 在执行自己队列任务时，是使用从尾部取。别人从它的队列里偷取任务时，是从队列头部取。所以减少了取时的竞争。</span><br><span class="line"></span><br><span class="line">2、被偷取的任务，一般都是最早入队列的任务。这种任务一般来说，都是非常大的任务，是那种需要进行递归分析的的大任务，而不是那种分解完的小任务。所以，减少了任务偷取的次数。 </span><br><span class="line">（注意：在实现上，worker thread 在执行自己队列任务时，不总是 LIFO 方式，可以通过构造函数修改成 FIFO 方式）</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">1、减少了取 task 时的竞争。worker thread 在执行自己队列任务时，是使用从尾部取。别人从它的队列里偷取任务时，是从队列头部取。所以减少了取时的竞争。
+
+2、被偷取的任务，一般都是最早入队列的任务。这种任务一般来说，都是非常大的任务，是那种需要进行递归分析的的大任务，而不是那种分解完的小任务。所以，减少了任务偷取的次数。 
+（注意：在实现上，worker thread 在执行自己队列任务时，不总是 LIFO 方式，可以通过构造函数修改成 FIFO 方式）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <ul>
 <li>g-4 关于双向队列</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">双向队列在实现方面的主要挑战是“同步”和“its avoidance（不知道怎么翻译）”。即使JVM优化了同步功能，每次 push 和 pop 时都要获取锁的这种操作，也会变成瓶颈。但是，一些策略的改变，提供了一种解决方案：</span><br><span class="line"></span><br><span class="line">push 和 pop 操作，只针对本线程内的队列。</span><br><span class="line">“偷取”操作可以很方便地通过一个“偷取锁”，来进行限制（双向锁在情况需要时，也可以使“偷取”操作失效）。因此，在队列两端的同步问题上的控制操作，就会减少。</span><br><span class="line">当双向队列要变成空时，可以对pop 或“偷取”操作进行控制。不然，这两个操作要被担保，可以操作disjoint elements of the array</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">双向队列在实现方面的主要挑战是“同步”和“its avoidance（不知道怎么翻译）”。即使JVM优化了同步功能，每次 push 和 pop 时都要获取锁的这种操作，也会变成瓶颈。但是，一些策略的改变，提供了一种解决方案：
+
+push 和 pop 操作，只针对本线程内的队列。
+“偷取”操作可以很方便地通过一个“偷取锁”，来进行限制（双向锁在情况需要时，也可以使“偷取”操作失效）。因此，在队列两端的同步问题上的控制操作，就会减少。
+当双向队列要变成空时，可以对pop 或“偷取”操作进行控制。不然，这两个操作要被担保，可以操作disjoint elements of the array<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -765,6 +922,269 @@
     
 
     
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'Ti4gaJ8rOTxCnIw4OiEinyYD-gzGzoHsz',
+        appKey: 'k6GNNvGmI3Hba5mQOz43N5nA',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'just go go'
+    });
+</script>
 
     
 

@@ -29,7 +29,9 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
 
 
 
@@ -472,15 +474,413 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
 
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p><strong>Redis工具类对string，list，hash，set，zset数据类型的操作。</strong> </p>
-<h4 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;&#x2F;artifactId&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="Redis代码配置"><a href="#Redis代码配置" class="headerlink" title="Redis代码配置"></a>Redis代码配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.cache.annotation.EnableCaching;</span><br><span class="line">import org.springframework.context.annotation.Bean;</span><br><span class="line">import org.springframework.context.annotation.Configuration;</span><br><span class="line">import org.springframework.data.redis.connection.RedisConnectionFactory;</span><br><span class="line">import org.springframework.data.redis.core.*;</span><br><span class="line">  </span><br><span class="line">&#x2F;**</span><br><span class="line"> * </span><br><span class="line"> * Redis模板配置，缓存配置</span><br><span class="line"> *&#x2F;</span><br><span class="line">  </span><br><span class="line">@Configuration</span><br><span class="line">@EnableCaching</span><br><span class="line">public class RedisConfig &#123;</span><br><span class="line">  </span><br><span class="line">    @Autowired</span><br><span class="line">    RedisConnectionFactory redisConnectionFactory;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 实例化 RedisTemplate 对象</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public RedisTemplate&lt;String, Object&gt; functionDomainRedisTemplate() &#123;</span><br><span class="line">        RedisTemplate&lt;String, Object&gt; redisTemplate &#x3D; new RedisTemplate&lt;String, Object&gt;();</span><br><span class="line">        initDomainRedisTemplate(redisTemplate, redisConnectionFactory);</span><br><span class="line">        return redisTemplate;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 设置数据存入 redis 的序列化方式</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private void initDomainRedisTemplate(RedisTemplate&lt;String, Object&gt; redisTemplate, RedisConnectionFactory factory) &#123;</span><br><span class="line">        &#x2F;***</span><br><span class="line">        redisTemplate.setKeySerializer(new StringRedisSerializer());</span><br><span class="line">        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());</span><br><span class="line">        redisTemplate.setHashKeySerializer(new StringRedisSerializer());</span><br><span class="line">        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer(Object.class));</span><br><span class="line">        *&#x2F;</span><br><span class="line">        redisTemplate.setConnectionFactory(factory);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 实例化 HashOperations 对象,可以使用 Hash 类型操作</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public HashOperations&lt;String, String, Object&gt; hashOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) &#123;</span><br><span class="line">        return redisTemplate.opsForHash();</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 实例化 ValueOperations 对象,可以使用 String 操作</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public ValueOperations&lt;String, Object&gt; valueOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) &#123;</span><br><span class="line">        return redisTemplate.opsForValue();</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 实例化 ListOperations 对象,可以使用 List 操作</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public ListOperations&lt;String, Object&gt; listOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) &#123;</span><br><span class="line">        return redisTemplate.opsForList();</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 实例化 SetOperations 对象,可以使用 Set 操作</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public SetOperations&lt;String, Object&gt; setOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) &#123;</span><br><span class="line">        return redisTemplate.opsForSet();</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 实例化 ZSetOperations 对象,可以使用 ZSet 操作</span><br><span class="line">     *&#x2F;</span><br><span class="line">    @Bean</span><br><span class="line">    public ZSetOperations&lt;String, Object&gt; zSetOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) &#123;</span><br><span class="line">        return redisTemplate.opsForZSet();</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="Redis操作代码"><a href="#Redis操作代码" class="headerlink" title="Redis操作代码"></a>Redis操作代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br></pre></td><td class="code"><pre><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.data.redis.core.*;</span><br><span class="line">import org.springframework.stereotype.Service;</span><br><span class="line">  </span><br><span class="line">import javax.annotation.Resource;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.Set;</span><br><span class="line">import java.util.concurrent.TimeUnit;</span><br><span class="line">  </span><br><span class="line">@Service</span><br><span class="line">public class RedisService &#123;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    @Autowired</span><br><span class="line">    private RedisTemplate&lt;String, Object&gt; redisTemplate;</span><br><span class="line">     &#x2F;&#x2F; HashMap操作</span><br><span class="line">    @Resource</span><br><span class="line">    private HashOperations&lt;String, String, Object&gt; hashOperations;</span><br><span class="line">    &#x2F;&#x2F; Object操作</span><br><span class="line">    @Resource</span><br><span class="line">    private ValueOperations&lt;String, Object&gt; valueOperations;</span><br><span class="line">     &#x2F;&#x2F; List操作</span><br><span class="line">    @Resource</span><br><span class="line">    private ListOperations&lt;String, Object&gt; listOperations;</span><br><span class="line">  </span><br><span class="line">     &#x2F;&#x2F; set操作</span><br><span class="line">    @Resource</span><br><span class="line">    private SetOperations&lt;String, Object&gt; setOperations;</span><br><span class="line">     &#x2F;&#x2F; ZSet操作</span><br><span class="line">    @Resource</span><br><span class="line">    private ZSetOperations&lt;String, Object&gt; zSetOperations;</span><br><span class="line">  </span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">    &#x2F;&#x2F; redisTemplate</span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 判断key是否存在</span><br><span class="line">     * @param key</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean hasKey(String key) &#123;</span><br><span class="line">        return redisTemplate.hasKey(key);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 删除key</span><br><span class="line">     * @param key</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void delete(String key)&#123;</span><br><span class="line">        redisTemplate.delete(key);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 判断指定key的hashKey是否存在</span><br><span class="line">     * @param key</span><br><span class="line">     * @param hashKey</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean hasKey(String key, String hashKey) &#123;</span><br><span class="line">        return redisTemplate.opsForHash().hasKey(key, hashKey);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 设置超时时间</span><br><span class="line">     * @param key</span><br><span class="line">     * @param timeout</span><br><span class="line">     * @param unit</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void expire(String key, final long timeout, final TimeUnit unit) &#123;</span><br><span class="line">        redisTemplate.expire(key, timeout, unit);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取过期时间</span><br><span class="line">     * @param key</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public long ttl(String key)&#123;</span><br><span class="line">        return redisTemplate.getExpire(key);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取指定pattern的key</span><br><span class="line">     * @param pattern</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Set&lt;String&gt; keys(String pattern) &#123;</span><br><span class="line">        return redisTemplate.keys(pattern);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 删除多个key</span><br><span class="line">     * @param keys</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void delete(Set&lt;String&gt; keys) &#123;</span><br><span class="line">        redisTemplate.delete(keys);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 设置过期时间</span><br><span class="line">     * @param key</span><br><span class="line">     * @param expire</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private void setExpire (String key,long expire)&#123;</span><br><span class="line">        if (expire !&#x3D; -1) &#123;</span><br><span class="line">            redisTemplate.expire(key, expire, TimeUnit.SECONDS);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">    &#x2F;&#x2F; ValueOperations -&gt; Redis String&#x2F;Value 操作</span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 设置key-value值</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void addValue(String key, Object value,long expire)&#123;</span><br><span class="line">        valueOperations.set(key, value);</span><br><span class="line">  </span><br><span class="line">        setExpire(key,expire);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 设置key-value值,传入时间单位</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void addValue(String key, Object value,long expire, TimeUnit timeUnit)&#123;</span><br><span class="line">        valueOperations.set(key, value, expire, timeUnit);</span><br><span class="line">  </span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 设置key-value值, 无过期时间</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void addValue(String key, Object value)&#123;</span><br><span class="line">        valueOperations.set(key, value);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取key的值</span><br><span class="line">     *</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Object getValue(String key)&#123;</span><br><span class="line">        return valueOperations.get(key);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">    &#x2F;&#x2F; HashOperations -&gt; Redis Redis Hash 操作</span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 向redis 中添加内容</span><br><span class="line">     * @param key       保存key</span><br><span class="line">     * @param hashKey   hashKey</span><br><span class="line">     * @param data      保存对象 data</span><br><span class="line">     * @param expire    过期时间    -1：表示不过期</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void addHashValue(String key,String hashKey, Object data, long expire) &#123;</span><br><span class="line">        hashOperations.put(key, hashKey, data);</span><br><span class="line">  </span><br><span class="line">        setExpire(key,expire);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Hash 添加数据</span><br><span class="line">     * @param key   key</span><br><span class="line">     * @param map   data</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void addAllHashValue(String key, Map&lt;String, Object&gt; map, long expire) &#123;</span><br><span class="line">        hashOperations.putAll(key, map);</span><br><span class="line">  </span><br><span class="line">        setExpire(key,expire);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 删除hash key</span><br><span class="line">     * @param key       key</span><br><span class="line">     * @param hashKey   hashKey</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public long deleteHashValue(String key, String hashKey) &#123;</span><br><span class="line">        return hashOperations.delete(key, hashKey);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取数据</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Object getHashValue(String key, String hashKey) &#123;</span><br><span class="line">        return hashOperations.get(key, hashKey);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 批量获取数据</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public List&lt;Object&gt; getHashAllValue(String key) &#123;</span><br><span class="line">        return hashOperations.values(key);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 批量获取指定hashKey的数据</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public List&lt;Object&gt; getHashMultiValue(String key, List&lt;String&gt; hashKeys) &#123;</span><br><span class="line">        return  hashOperations.multiGet(key, hashKeys);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取hash数量</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Long getHashCount(String key) &#123;</span><br><span class="line">        return hashOperations.size(key);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">    &#x2F;&#x2F; ZSetOperations -&gt; Redis Sort Set 操作</span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 设置zset值</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean addZSetValue(String key, Object member, long score)&#123;</span><br><span class="line">        return zSetOperations.add(key, member, score);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 设置zset值</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean addZSetValue(String key, Object member, double score)&#123;</span><br><span class="line">        return zSetOperations.add(key, member, score);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 批量设置zset值</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public long addBatchZSetValue(String key, Set&lt;ZSetOperations.TypedTuple&lt;Object&gt;&gt; tuples)&#123;</span><br><span class="line">        return zSetOperations.add(key, tuples);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 自增zset值</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void incZSetValue(String key, String member, long delta)&#123;</span><br><span class="line">        zSetOperations.incrementScore(key, member, delta);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取zset数量</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public long getZSetScore(String key, String member)&#123;</span><br><span class="line">        Double score &#x3D; zSetOperations.score(key, member);</span><br><span class="line">        if(score&#x3D;&#x3D;null)&#123;</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            return score.longValue();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取有序集 key 中成员 member 的排名 。其中有序集成员按 score 值递减 (从小到大) 排序。</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Set&lt;ZSetOperations.TypedTuple&lt;Object&gt;&gt; getZSetRank(String key, long start, long end)&#123;</span><br><span class="line">        return zSetOperations.rangeWithScores(key, start, end);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">    &#x2F;&#x2F; listOperations -&gt; Redis List() 操作</span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 添加list列表</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void addListValue(String key,Object list)&#123;</span><br><span class="line">        listOperations.leftPush(key,list);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取指定Key对应的list</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Object getListValue(String key)&#123;</span><br><span class="line">        return listOperations.leftPop(key);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">    &#x2F;&#x2F; setOperations -&gt; Redis Set() 操作</span><br><span class="line">    &#x2F;&#x2F;---------------------------------------------------------------------</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 添加Set集合集合</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public void addSetValue(String key,Object list)&#123;</span><br><span class="line">        setOperations.add(key,list);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取指定Key对应的set</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Object getSetValue(String key)&#123;</span><br><span class="line">        return setOperations.members(key);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 获取并移除指定key的值</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public Object popSetValue(String key)&#123;</span><br><span class="line">        return setOperations.pop(key);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h4><pre class="line-numbers language-none"><code class="language-none">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+&lt;/dependency&gt;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="Redis代码配置"><a href="#Redis代码配置" class="headerlink" title="Redis代码配置"></a>Redis代码配置</h4><pre class="line-numbers language-none"><code class="language-none">import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.*;
+  
+/**
+ * 
+ * Redis模板配置，缓存配置
+ */
+  
+@Configuration
+@EnableCaching
+public class RedisConfig {
+  
+    @Autowired
+    RedisConnectionFactory redisConnectionFactory;
+  
+    /**
+     * 实例化 RedisTemplate 对象
+     */
+    @Bean
+    public RedisTemplate&lt;String, Object&gt; functionDomainRedisTemplate() {
+        RedisTemplate&lt;String, Object&gt; redisTemplate = new RedisTemplate&lt;String, Object&gt;();
+        initDomainRedisTemplate(redisTemplate, redisConnectionFactory);
+        return redisTemplate;
+    }
+  
+    /**
+     * 设置数据存入 redis 的序列化方式
+     */
+    private void initDomainRedisTemplate(RedisTemplate&lt;String, Object&gt; redisTemplate, RedisConnectionFactory factory) {
+        /***
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer(Object.class));
+        */
+        redisTemplate.setConnectionFactory(factory);
+    }
+  
+    /**
+     * 实例化 HashOperations 对象,可以使用 Hash 类型操作
+     */
+    @Bean
+    public HashOperations&lt;String, String, Object&gt; hashOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) {
+        return redisTemplate.opsForHash();
+    }
+  
+    /**
+     * 实例化 ValueOperations 对象,可以使用 String 操作
+     */
+    @Bean
+    public ValueOperations&lt;String, Object&gt; valueOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) {
+        return redisTemplate.opsForValue();
+    }
+  
+    /**
+     * 实例化 ListOperations 对象,可以使用 List 操作
+     */
+    @Bean
+    public ListOperations&lt;String, Object&gt; listOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) {
+        return redisTemplate.opsForList();
+    }
+  
+    /**
+     * 实例化 SetOperations 对象,可以使用 Set 操作
+     */
+    @Bean
+    public SetOperations&lt;String, Object&gt; setOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) {
+        return redisTemplate.opsForSet();
+    }
+  
+    /**
+     * 实例化 ZSetOperations 对象,可以使用 ZSet 操作
+     */
+    @Bean
+    public ZSetOperations&lt;String, Object&gt; zSetOperations(RedisTemplate&lt;String, Object&gt; redisTemplate) {
+        return redisTemplate.opsForZSet();
+    }
+     
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="Redis操作代码"><a href="#Redis操作代码" class="headerlink" title="Redis操作代码"></a>Redis操作代码</h4><pre class="line-numbers language-none"><code class="language-none">import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.*;
+import org.springframework.stereotype.Service;
+  
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+  
+@Service
+public class RedisService {
+  
+  
+    @Autowired
+    private RedisTemplate&lt;String, Object&gt; redisTemplate;
+     // HashMap操作
+    @Resource
+    private HashOperations&lt;String, String, Object&gt; hashOperations;
+    // Object操作
+    @Resource
+    private ValueOperations&lt;String, Object&gt; valueOperations;
+     // List操作
+    @Resource
+    private ListOperations&lt;String, Object&gt; listOperations;
+  
+     // set操作
+    @Resource
+    private SetOperations&lt;String, Object&gt; setOperations;
+     // ZSet操作
+    @Resource
+    private ZSetOperations&lt;String, Object&gt; zSetOperations;
+  
+    //---------------------------------------------------------------------
+    // redisTemplate
+    //---------------------------------------------------------------------
+  
+    /**
+     * 判断key是否存在
+     * @param key
+     */
+    public boolean hasKey(String key) {
+        return redisTemplate.hasKey(key);
+    }
+  
+    /**
+     * 删除key
+     * @param key
+     */
+    public void delete(String key){
+        redisTemplate.delete(key);
+    }
+  
+    /**
+     * 判断指定key的hashKey是否存在
+     * @param key
+     * @param hashKey
+     * @return
+     */
+    public boolean hasKey(String key, String hashKey) {
+        return redisTemplate.opsForHash().hasKey(key, hashKey);
+    }
+  
+    /**
+     * 设置超时时间
+     * @param key
+     * @param timeout
+     * @param unit
+     */
+    public void expire(String key, final long timeout, final TimeUnit unit) {
+        redisTemplate.expire(key, timeout, unit);
+    }
+  
+    /**
+     * 获取过期时间
+     * @param key
+     * @return
+     */
+    public long ttl(String key){
+        return redisTemplate.getExpire(key);
+    }
+  
+    /**
+     * 获取指定pattern的key
+     * @param pattern
+     * @return
+     */
+    public Set&lt;String&gt; keys(String pattern) {
+        return redisTemplate.keys(pattern);
+    }
+  
+    /**
+     * 删除多个key
+     * @param keys
+     */
+    public void delete(Set&lt;String&gt; keys) {
+        redisTemplate.delete(keys);
+    }
+  
+    /**
+     * 设置过期时间
+     * @param key
+     * @param expire
+     */
+    private void setExpire (String key,long expire){
+        if (expire != -1) {
+            redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+        }
+    }
+  
+    //---------------------------------------------------------------------
+    // ValueOperations -&gt; Redis String/Value 操作
+    //---------------------------------------------------------------------
+  
+    /**
+     * 设置key-value值
+     */
+    public void addValue(String key, Object value,long expire){
+        valueOperations.set(key, value);
+  
+        setExpire(key,expire);
+    }
+  
+    /**
+     * 设置key-value值,传入时间单位
+     */
+    public void addValue(String key, Object value,long expire, TimeUnit timeUnit){
+        valueOperations.set(key, value, expire, timeUnit);
+  
+    }
+  
+    /**
+     * 设置key-value值, 无过期时间
+     */
+    public void addValue(String key, Object value){
+        valueOperations.set(key, value);
+    }
+  
+    /**
+     * 获取key的值
+     *
+     */
+    public Object getValue(String key){
+        return valueOperations.get(key);
+    }
+  
+    //---------------------------------------------------------------------
+    // HashOperations -&gt; Redis Redis Hash 操作
+    //---------------------------------------------------------------------
+  
+    /**
+     * 向redis 中添加内容
+     * @param key       保存key
+     * @param hashKey   hashKey
+     * @param data      保存对象 data
+     * @param expire    过期时间    -1：表示不过期
+     */
+    public void addHashValue(String key,String hashKey, Object data, long expire) {
+        hashOperations.put(key, hashKey, data);
+  
+        setExpire(key,expire);
+    }
+  
+    /**
+     * Hash 添加数据
+     * @param key   key
+     * @param map   data
+     */
+    public void addAllHashValue(String key, Map&lt;String, Object&gt; map, long expire) {
+        hashOperations.putAll(key, map);
+  
+        setExpire(key,expire);
+    }
+  
+    /**
+     * 删除hash key
+     * @param key       key
+     * @param hashKey   hashKey
+     */
+    public long deleteHashValue(String key, String hashKey) {
+        return hashOperations.delete(key, hashKey);
+    }
+  
+    /**
+     * 获取数据
+     */
+    public Object getHashValue(String key, String hashKey) {
+        return hashOperations.get(key, hashKey);
+    }
+  
+    /**
+     * 批量获取数据
+     */
+    public List&lt;Object&gt; getHashAllValue(String key) {
+        return hashOperations.values(key);
+    }
+  
+    /**
+     * 批量获取指定hashKey的数据
+     */
+    public List&lt;Object&gt; getHashMultiValue(String key, List&lt;String&gt; hashKeys) {
+        return  hashOperations.multiGet(key, hashKeys);
+    }
+  
+    /**
+     * 获取hash数量
+     */
+    public Long getHashCount(String key) {
+        return hashOperations.size(key);
+    }
+  
+  
+    //---------------------------------------------------------------------
+    // ZSetOperations -&gt; Redis Sort Set 操作
+    //---------------------------------------------------------------------
+  
+    /**
+     * 设置zset值
+     */
+    public boolean addZSetValue(String key, Object member, long score){
+        return zSetOperations.add(key, member, score);
+    }
+  
+    /**
+     * 设置zset值
+     */
+    public boolean addZSetValue(String key, Object member, double score){
+        return zSetOperations.add(key, member, score);
+    }
+  
+    /**
+     * 批量设置zset值
+     */
+    public long addBatchZSetValue(String key, Set&lt;ZSetOperations.TypedTuple&lt;Object&gt;&gt; tuples){
+        return zSetOperations.add(key, tuples);
+    }
+  
+    /**
+     * 自增zset值
+     */
+    public void incZSetValue(String key, String member, long delta){
+        zSetOperations.incrementScore(key, member, delta);
+    }
+  
+    /**
+     * 获取zset数量
+     */
+    public long getZSetScore(String key, String member){
+        Double score = zSetOperations.score(key, member);
+        if(score==null){
+            return 0;
+        }else{
+            return score.longValue();
+        }
+    }
+  
+    /**
+     * 获取有序集 key 中成员 member 的排名 。其中有序集成员按 score 值递减 (从小到大) 排序。
+     */
+    public Set&lt;ZSetOperations.TypedTuple&lt;Object&gt;&gt; getZSetRank(String key, long start, long end){
+        return zSetOperations.rangeWithScores(key, start, end);
+    }
+  
+  
+    //---------------------------------------------------------------------
+    // listOperations -&gt; Redis List() 操作
+    //---------------------------------------------------------------------
+  
+    /**
+     * 添加list列表
+     */
+    public void addListValue(String key,Object list){
+        listOperations.leftPush(key,list);
+    }
+  
+    /**
+     * 获取指定Key对应的list
+     */
+    public Object getListValue(String key){
+        return listOperations.leftPop(key);
+    }
+  
+    //---------------------------------------------------------------------
+    // setOperations -&gt; Redis Set() 操作
+    //---------------------------------------------------------------------
+  
+    /**
+     * 添加Set集合集合
+     */
+    public void addSetValue(String key,Object list){
+        setOperations.add(key,list);
+    }
+  
+    /**
+     * 获取指定Key对应的set
+     */
+    public Object getSetValue(String key){
+        return setOperations.members(key);
+    }
+  
+    /**
+     * 获取并移除指定key的值
+     */
+    public Object popSetValue(String key){
+        return setOperations.pop(key);
+    }
+  
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
                 
             </div>
@@ -704,6 +1104,269 @@
     
 
     
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'Ti4gaJ8rOTxCnIw4OiEinyYD-gzGzoHsz',
+        appKey: 'k6GNNvGmI3Hba5mQOz43N5nA',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'just go go'
+    });
+</script>
 
     
 
