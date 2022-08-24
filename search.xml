@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>npm配置淘宝镜像远程仓库</title>
+      <link href="2022/08/24/it-nodejs-202208241710.html"/>
+      <url>2022/08/24/it-nodejs-202208241710.html</url>
+      
+        <content type="html"><![CDATA[<p><strong>npm配置淘宝镜像远程仓库</strong> </p><h4 id="第1步：淘宝镜像链接获取："><a href="#第1步：淘宝镜像链接获取：" class="headerlink" title="第1步：淘宝镜像链接获取："></a>第1步：淘宝镜像链接获取：</h4><pre class="line-numbers language-none"><code class="language-none">https://registry.npmmirror.comhttp://npm.taobao.org和 http://registry.npm.taobao.org 将在 2022.06.30 号正式下线和停止 DNS 解析。新域名为 npmmirror.com, 相关服务域名切换规则请参考：http://npm.taobao.org =&gt; http://npmmirror.comhttp://registry.npm.taobao.org =&gt; http://registry.npmmirror.com<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="第2步：执行配置指令："><a href="#第2步：执行配置指令：" class="headerlink" title="第2步：执行配置指令："></a>第2步：执行配置指令：</h4> <pre class="line-numbers language-none"><code class="language-none">npm config set registry https://registry.npmmirror.com<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h4 id="第3步：查看配置："><a href="#第3步：查看配置：" class="headerlink" title="第3步：查看配置："></a>第3步：查看配置：</h4> <pre class="line-numbers language-none"><code class="language-none">npm config get registry<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h4 id="第4步：如果需要解除镜像并恢复到官方源，请执行以下命令："><a href="#第4步：如果需要解除镜像并恢复到官方源，请执行以下命令：" class="headerlink" title="第4步：如果需要解除镜像并恢复到官方源，请执行以下命令："></a>第4步：如果需要解除镜像并恢复到官方源，请执行以下命令：</h4> <pre class="line-numbers language-none"><code class="language-none">npm config set registry https://registry.npmjs.org<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> nodejs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> npm </tag>
+            
+            <tag> 前端 </tag>
+            
+            <tag> nodejs </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Docker Desktop搭建MySQL方法</title>
       <link href="2022/08/24/it-docker-202208241006.html"/>
       <url>2022/08/24/it-docker-202208241006.html</url>
