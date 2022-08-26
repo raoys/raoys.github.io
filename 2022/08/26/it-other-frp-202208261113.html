@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="npm配置淘宝镜像远程仓库, 饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
+    <meta name="keywords" content="一文搞懂frp内网穿透并搭建配置使用, 饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
     <meta name="description" content="饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>npm配置淘宝镜像远程仓库 | Jason Rao&#39;s Blog</title>
+    <title>一文搞懂frp内网穿透并搭建配置使用 | Jason Rao&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -245,12 +245,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">npm配置淘宝镜像远程仓库</h1>
+                    <h1 class="description center-align post-title">一文搞懂frp内网穿透并搭建配置使用</h1>
                 </div>
             </div>
         </div>
@@ -368,16 +368,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/npm/">
-                                <span class="chip bg-color">npm</span>
+                            <a href="/tags/FRP/">
+                                <span class="chip bg-color">FRP</span>
                             </a>
                         
-                            <a href="/tags/%E5%89%8D%E7%AB%AF/">
-                                <span class="chip bg-color">前端</span>
-                            </a>
-                        
-                            <a href="/tags/nodejs/">
-                                <span class="chip bg-color">nodejs</span>
+                            <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">
+                                <span class="chip bg-color">内网穿透</span>
                             </a>
                         
                     </div>
@@ -388,8 +384,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/nodejs/" class="post-category">
-                                nodejs
+                            <a href="/categories/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" class="post-category">
+                                内网穿透
                             </a>
                         
                     </div>
@@ -401,7 +397,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-08-24
+                    2022-08-26
                 </div>
                 
 
@@ -425,27 +421,197 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><strong>npm配置淘宝镜像远程仓库</strong> </p>
-<h4 id="第1步：淘宝镜像链接获取："><a href="#第1步：淘宝镜像链接获取：" class="headerlink" title="第1步：淘宝镜像链接获取："></a>第1步：淘宝镜像链接获取：</h4><pre class="line-numbers language-none"><code class="language-none">https://registry.npmmirror.com
-
-http://npm.taobao.org和 http://registry.npm.taobao.org 将在 2022.06.30 号正式下线和停止 DNS 解析。
-新域名为 npmmirror.com, 相关服务域名切换规则请参考：
-
-http://npm.taobao.org =&gt; http://npmmirror.com
-http://registry.npm.taobao.org =&gt; http://registry.npmmirror.com
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+                <p><strong>一文搞懂frp内网穿透并搭建配置使用</strong> </p>
+<pre class="line-numbers language-none"><code class="language-none">简介： 一文搞懂frp内网穿透并搭建配置使用，Windows、Mac电脑远程链接！ frp 是一个专注于内网穿透的高性能的反向代理应用，支持 TCP、UDP、HTTP、HTTPS 等多种协议。可以将内网服务以安全、便捷的方式通过具有公网 IP 节点的中转暴露到公网。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
-<h4 id="第2步：执行配置指令："><a href="#第2步：执行配置指令：" class="headerlink" title="第2步：执行配置指令："></a>第2步：执行配置指令：</h4> <pre class="line-numbers language-none"><code class="language-none">npm config set registry https://registry.npmmirror.com
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="frp-是什么"><a href="#frp-是什么" class="headerlink" title="frp 是什么"></a>frp 是什么</h4><pre class="line-numbers language-none"><code class="language-none">frp 是一个专注于内网穿透的高性能的反向代理应用，支持 TCP、UDP、HTTP、HTTPS 等多种协议。可以将内网服务以安全、便捷的方式通过具有公网 IP 节点的中转暴露到公网。
+
+有了内网穿透你能干什么？
+
+远程访问内网的 http/https 服务
+远程桌面(Windows/Mac)
+远程文件、 SSH
+小程序开发
+...
 
 
-<h4 id="第3步：查看配置："><a href="#第3步：查看配置：" class="headerlink" title="第3步：查看配置："></a>第3步：查看配置：</h4> <pre class="line-numbers language-none"><code class="language-none">npm config get registry
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+有了内网穿透在外访问家里的电脑、NAS、树莓派、摄像头等网络设备或远程控制，那都不是事儿~
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="第4步：如果需要解除镜像并恢复到官方源，请执行以下命令："><a href="#第4步：如果需要解除镜像并恢复到官方源，请执行以下命令：" class="headerlink" title="第4步：如果需要解除镜像并恢复到官方源，请执行以下命令："></a>第4步：如果需要解除镜像并恢复到官方源，请执行以下命令：</h4> <pre class="line-numbers language-none"><code class="language-none">npm config set registry https://registry.npmjs.org
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><pre class="line-numbers language-none"><code class="language-none">官方项目地址：https://github.com/fatedier/frp
+以下命令请在服务器中执行
 
+下载 
+wget https://github.com/fatedier/frp/releases/download/v0.38.0/frp_0.38.0_linux_amd64.tar.gz
+
+解压
+tar -xvf frp_0.38.0_linux_amd64.tar.gz 
+
+移动至/usr/local
+mkdir /usr/local/frp
+mv frp_0.38.0_linux_amd64/* /usr/local/frp/
+
+文件说明
+frps.ini: 服务端配置文件
+frps: 服务端软件
+frpc.ini: 客户端配置文件
+frpc: 客户端软件
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="配置systemctl来控制，服务端运行"><a href="#配置systemctl来控制，服务端运行" class="headerlink" title="配置systemctl来控制，服务端运行"></a>配置systemctl来控制，服务端运行</h4><pre class="line-numbers language-none"><code class="language-none">
+vim新建文件并写入配置内容
+vim /usr/lib/systemd/system/frp.service
+
+写入以下内容，注意上文移动放置的路径和此处有关。这里是启动的服务端。
+[Unit]
+Description=The nginx HTTP and reverse proxy server
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/frp/frps -c /usr/local/frp/frps.ini
+KillSignal=SIGQUIT
+TimeoutStopSec=5
+KillMode=process
+PrivateTmp=true
+StandardOutput=syslog
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+重新加载服务的配置文件
+systemctl daemon-reload
+
+现在就可以用 systemctl 套装来控制 frp 了。
+
+
+启动/停止/重启，查看状态，设置开机自启/关闭开机自启
+systemctl start frp
+systemctl stop frp
+systemctl restart frp
+systemctl status frp
+systemctl enable frp
+systemctl disable frp
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="配置和使用"><a href="#配置和使用" class="headerlink" title="配置和使用"></a>配置和使用</h4><p>服务端</p>
+<pre class="line-numbers language-none"><code class="language-none">frps.ini配置：
+[common] #必须设置
+bind_port = 7000 #是自己设定的frp服务端端口
+vhost_http_port = 80 #是自己设定的http访问端口
+token = 123  #核实身份用，加了更安全
+
+[ssh] #ssh反向代理(不是必须设置)
+listen_port = 6000 是自己设定的ssh访问端口
+
+[web] #http反向代理[]里的内容可以自己设定，但是客户端和服务端必须要对应(如[aaa],[bbb])；
+type = http #为服务类型，可以设为http,https
+custom_domains = test1.a.com #为要映射的域名，记得域名的A记录要解析到外网主机的IP。
+
+[web2] #同上(可设置多个)
+
+
+示例
+[common]
+bind_port = 7000
+vhost_http_port = 80
+
+[ssh]
+listen_port = 6000
+
+[web]
+type = http
+custom_domains = test1.a.com
+
+[web2]
+type = http
+custom_domains = test2.a.com
+
+
+
+
+my eg:
+[common]
+bind_port = 8888
+vhost_http_port = 8080 
+
+
+启动
+./frps -c ./frps.ini
+
+# 后台启动
+nohup ./frps -c ./frps.ini &amp;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>客户端</p>
+<pre class="line-numbers language-none"><code class="language-none">frpc.ini配置：
+[common]
+server_addr = 远程frp服务器ip
+server_port = 远程frp服务器端口
+token = 远程frp服务器token
+
+[http]
+type = http
+local_ip = 127.0.0.1
+local_port = 本地端口号
+remote_port = 远程frp服务器的http服务端口号
+custom_domains = 自定义配置的域名
+subdomain = 匹配服务端配置的subdomain_host
+
+
+示例：
+[common]
+server_addr = xx.xx.xx.xx
+server_port = 7000
+token = 123
+
+[web] 
+type = http
+custom_domains = xx.xx.xx.xx
+local_ip = 127.0.0.1
+local_port = 8080
+custom_domains = xxx.xxx.xxx
+subdomain = k2p
+
+
+my eg:
+[common]
+server_addr = www.mydomains.cn
+server_port = 8888
+
+
+# 连接内网SSH
+[ssh] 
+type = tcp
+local_ip 127.0.0.1
+local_port 22
+remote_port 222
+
+# 访问内网http/https服务
+[web]
+type = http
+local_port = 80
+custom_domains = frp.mydomains.cn
+
+启动
+./frpc -c ./frpc.ini
+
+# 后台启动
+nohup ./frpc -c ./frpc.ini &amp;
+
+
+运行服务后访问 custom_domains:vhost_http_port
+示例：http://123.123.123.123 80可以省略
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<p>参考文章：<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/853534?spm=ding_open_doc.document.0.0.14bc481bUUxa1q">https://developer.aliyun.com/article/853534?spm=ding_open_doc.document.0.0.14bc481bUUxa1q</a></p>
 
                 
             </div>
@@ -472,7 +638,7 @@ http://registry.npm.taobao.org =&gt; http://registry.npmmirror.com
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://raoys.github.io/2022/08/24/it-nodejs-202208241710.html">https://raoys.github.io/2022/08/24/it-nodejs-202208241710.html</a>
+                    <a href="https://raoys.github.io/2022/08/26/it-other-frp-202208261113.html">https://raoys.github.io/2022/08/26/it-other-frp-202208261113.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -510,16 +676,12 @@ http://registry.npm.taobao.org =&gt; http://registry.npmmirror.com
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/npm/">
-                                    <span class="chip bg-color">npm</span>
+                                <a href="/tags/FRP/">
+                                    <span class="chip bg-color">FRP</span>
                                 </a>
                             
-                                <a href="/tags/%E5%89%8D%E7%AB%AF/">
-                                    <span class="chip bg-color">前端</span>
-                                </a>
-                            
-                                <a href="/tags/nodejs/">
-                                    <span class="chip bg-color">nodejs</span>
+                                <a href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">
+                                    <span class="chip bg-color">内网穿透</span>
                                 </a>
                             
                         </div>
@@ -952,9 +1114,10 @@ http://registry.npm.taobao.org =&gt; http://registry.npmmirror.com
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/08/26/it-other-frp-202208261113.html">
                     <div class="card-image">
@@ -972,9 +1135,9 @@ http://registry.npm.taobao.org =&gt; http://registry.npmmirror.com
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022年08月26日
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022年08月26日
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -987,6 +1150,7 @@ http://registry.npm.taobao.org =&gt; http://registry.npmmirror.com
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1009,13 +1173,13 @@ http://registry.npm.taobao.org =&gt; http://registry.npmmirror.com
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/08/24/it-docker-202208241006.html">
+                <a href="/2022/08/24/it-nodejs-202208241710.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Docker Desktop搭建MySQL方法">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="npm配置淘宝镜像远程仓库">
                         
-                        <span class="card-title">Docker Desktop搭建MySQL方法</span>
+                        <span class="card-title">npm配置淘宝镜像远程仓库</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1032,8 +1196,8 @@ http://registry.npm.taobao.org =&gt; http://registry.npmmirror.com
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%AE%B9%E5%99%A8/" class="post-category">
-                                    容器
+                            <a href="/categories/nodejs/" class="post-category">
+                                    nodejs
                                 </a>
                             
                             
@@ -1043,8 +1207,16 @@ http://registry.npm.taobao.org =&gt; http://registry.npmmirror.com
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Docker/">
-                        <span class="chip bg-color">Docker</span>
+                    <a href="/tags/npm/">
+                        <span class="chip bg-color">npm</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%89%8D%E7%AB%AF/">
+                        <span class="chip bg-color">前端</span>
+                    </a>
+                    
+                    <a href="/tags/nodejs/">
+                        <span class="chip bg-color">nodejs</span>
                     </a>
                     
                 </div>
