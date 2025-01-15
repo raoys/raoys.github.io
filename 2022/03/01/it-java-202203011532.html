@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="HttpClient 如何设置请求接口等待时间, 饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
+    <meta name="keywords" content="SpringCloud使用Nginx代理、Gateway网关以后如何获取用户的真实IP, 饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
     <meta name="description" content="饶扬胜,饶扬胜博客,架构师博客,全栈技术,分布式架构,Jason Rao,raoyangsheng">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>HttpClient 如何设置请求接口等待时间 | Jason Rao&#39;s Blog</title>
+    <title>SpringCloud使用Nginx代理、Gateway网关以后如何获取用户的真实IP | Jason Rao&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -246,12 +246,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">HttpClient 如何设置请求接口等待时间</h1>
+                    <h1 class="description center-align post-title">SpringCloud使用Nginx代理、Gateway网关以后如何获取用户的真实IP</h1>
                 </div>
             </div>
         </div>
@@ -369,8 +369,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/JAVA/">
-                                <span class="chip bg-color">JAVA</span>
+                            <a href="/tags/SpringCloud/">
+                                <span class="chip bg-color">SpringCloud</span>
+                            </a>
+                        
+                            <a href="/tags/Gateway/">
+                                <span class="chip bg-color">Gateway</span>
+                            </a>
+                        
+                            <a href="/tags/Nginx/">
+                                <span class="chip bg-color">Nginx</span>
                             </a>
                         
                     </div>
@@ -394,7 +402,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-10-03
+                    2022-03-01
                 </div>
                 
 
@@ -418,123 +426,62 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>我们在请求接口的时候容易出现请求超时的现象，出现这一问题的原因可能是接口确实挂了，也可能是接口还没有来的及响应，我们程序里面已经出现了请求超时的现象</p>
-<h4 id="1、问题描述："><a href="#1、问题描述：" class="headerlink" title="1、问题描述："></a>1、问题描述：</h4><p>通常会出现以下的报错：</p>
-<pre class="line-numbers language-none"><code class="language-none">java.net.SocketTimeoutException: Read timed out
-	at java.net.SocketInputStream.socketRead0(SocketInputStream.java)
-	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
-	at java.net.SocketInputStream.read(SocketInputStream.java:170)
-	at java.net.SocketInputStream.read(SocketInputStream.java:141)
-	at org.apache.http.impl.conn.LoggingInputStream.read(LoggingInputStream.java:84)
-	at org.apache.http.impl.io.SessionInputBufferImpl.streamRead(SessionInputBufferImpl.java:137)
-	at org.apache.http.impl.io.SessionInputBufferImpl.fillBuffer(SessionInputBufferImpl.java:153)
-	at org.apache.http.impl.io.SessionInputBufferImpl.readLine(SessionInputBufferImpl.java:282)
-	at org.apache.http.impl.conn.DefaultHttpResponseParser.parseHead(DefaultHttpResponseParser.java:138)
-	at org.apache.http.impl.conn.DefaultHttpResponseParser.parseHead(DefaultHttpResponseParser.java:56)
-	at org.apache.http.impl.io.AbstractMessageParser.parse(AbstractMessageParser.java:259)
-	at org.apache.http.impl.DefaultBHttpClientConnection.receiveResponseHeader(DefaultBHttpClientConnection.java:163)
-	at org.apache.http.impl.conn.CPoolProxy.receiveResponseHeader(CPoolProxy.java:165)
-	at org.apache.http.protocol.HttpRequestExecutor.doReceiveResponse(HttpRequestExecutor.java:273)
-	at org.apache.http.protocol.HttpRequestExecutor.execute(HttpRequestExecutor.java:125)
-	at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:272)
-	at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:185)
-	at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89)
-	at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:110)
-	at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185)
-	at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+                <p><strong>背景</strong></p>
+<ul>
+<li>微服务架构使用了Nginx代理转发、并且使用了SpringCloud的Gateway统一控制所有请求,并获取用户请求的IP地址。</li>
+</ul>
+<h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><pre class="line-numbers language-none"><code class="language-none">1. Nginx设置
+  location / { 
+      root /opt/xxx/xxx-auth; 
+      index  index.html index.htm; 
+      try_files $uri $uri/ /index.html; 
+      
+     # 获取用户请求ip
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;  #获取客户端真实IP
+      proxy_set_header REMOTE-HOST $remote_addr;
+  }
 
-<p>结合接口日志的打印，我判断是第二种现象，就是接口还没有返回信息，我程序这边就出现了超时的报错。那么如何解决，我们只有增加接口的请求等待时间</p>
-<h4 id="2、问题解决："><a href="#2、问题解决：" class="headerlink" title="2、问题解决："></a>2、问题解决：</h4><pre class="line-numbers language-none"><code class="language-none">private static Logger logger = LoggerFactory.getLogger(HttpUtil.class);
- 
-	public static String postGeneralUrl(String url, String contentType, String jsonParam, String encoding, int reSend) {
-		
-		logger.info("当前请求接口地址:{}",jsonParam.toString());
-		// 声明返回结果
-		String result = "";
-		// 开始请求API接口时间
-		long startTime = System.currentTimeMillis();
-		// 请求API接口的响应时间
-		long endTime = 0L;
-		HttpEntity httpEntity = null;
-		HttpResponse httpResponse = null;
-		HttpClient httpClient = null;
-		try {
- 
-			contentType = contentType == null ? "application/x-www-form-urlencoded" : contentType;
-			// 创建连接
-			httpClient = HttpClientFactory.getInstance().getHttpClient();
-			// 设置请求头和报文
-			HttpPost httpPost = HttpClientFactory.getInstance().httpPost(url);
-			Header header = new BasicHeader("Accept-Encoding", null);
-			RequestConfig requestConfig =  RequestConfig.custom().setSocketTimeout(20000).setConnectTimeout(20000).build();
-			httpPost.setConfig(requestConfig);
-			httpPost.addHeader(header);
-			httpPost.addHeader("Content-Type", contentType);
-			List&lt;NameValuePair&gt; list = new LinkedList&lt;&gt;();
-			list.add(new BasicNameValuePair("params", jsonParam));// pageHelper放在body中传过去
-			// 使用URL实体转换工具
-			UrlEncodedFormEntity entityParam = new UrlEncodedFormEntity(list, "UTF-8"); // 使用 UrlEncodedFormEntity 来设置
-			// // body,消息体内容
-			httpPost.setEntity(entityParam);
-			logger.info("请求{}接口的参数为{}", url, jsonParam);
-			httpResponse = httpClient.execute(httpPost);
-			httpEntity = httpResponse.getEntity();
-			result = EntityUtils.toString(httpEntity);
-		} catch (SocketTimeoutException es) {
-			endTime = System.currentTimeMillis();
-			result = "网络连接异常，请检查网络或者开票服务是否正常启动";
-			logger.info("请求{}接口的响应报文内容为{},本次请求API接口的响应时间为:{}毫秒", url, result, (endTime - startTime));
-			logger.error("请求{}接口出现异常", url, es);
-			return result;
-		} catch (Exception e) {
-			logger.error("请求{}接口出现异常", url, e);
-		} finally {
-			try {
-				EntityUtils.consume(httpEntity);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		// 请求接口的响应时间
-		endTime = System.currentTimeMillis();
- 
-		logger.info("请求{}接口的响应报文内容为{},本次请求API接口的响应时间为:{}毫秒", url, result, (endTime - startTime));
-		return result;
- 
-	}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    
+2. Gateway网关设置：
 
-<p>其中主要是这部分代码：</p>
-<pre class="line-numbers language-none"><code class="language-none">   RequestConfig requestConfig =  RequestConfig.custom().setSocketTimeout(20000).setConnectTimeout(20000).build();
-httpPost.setConfig(requestConfig);
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+@Component
+@Log4j2
+public class AuthenticationFilter implements GlobalFilter, Ordered {
+    /**
+     * 验证请求头是否带有Authentication
+     */
+    @Override
+    public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
+        ServerHttpResponse response = exchange.getResponse();
+        String path = request.getPath().pathWithinApplication().value();
 
-<p>当然这个设置和使用的 http.client 版本也有一定的关系，当前版本如下：</p>
-<pre class="line-numbers language-none"><code class="language-none">&lt;!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore --&gt;
-		&lt;dependency&gt;
-			&lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
-			&lt;artifactId&gt;httpcore&lt;/artifactId&gt;
-			&lt;version&gt;4.4.10&lt;/version&gt;
-		&lt;/dependency&gt;
- 
-		&lt;!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient --&gt;
-		&lt;dependency&gt;
-			&lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
-			&lt;artifactId&gt;httpclient&lt;/artifactId&gt;
-			&lt;version&gt;4.5.6&lt;/version&gt;
-			&lt;exclusions&gt;
-				&lt;exclusion&gt;
-					&lt;groupId&gt;commons-codec&lt;/groupId&gt;
-					&lt;artifactId&gt;commons-codec&lt;/artifactId&gt;
-				&lt;/exclusion&gt;
-				&lt;exclusion&gt;
-					&lt;groupId&gt;commons-logging&lt;/groupId&gt;
-					&lt;artifactId&gt;commons-logging&lt;/artifactId&gt;
-				&lt;/exclusion&gt;
-			&lt;/exclusions&gt;
-		&lt;/dependency&gt;
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        Optional.of(exchange.getRequest()).ifPresent(item -&gt; {
+            // 获取客户端IP地址
+            List&lt;String&gt; xForwardedFor = item.getHeaders().get("x-forwarded-for");
+            List&lt;String&gt; xRealIp = item.getHeaders().get("x-real-ip");
+            List&lt;String&gt; remoteHost = item.getHeaders().get("remote-host");
+            response.getHeaders().add("X-Forwarded-For", (xForwardedFor == null || xForwardedFor.isEmpty()) ? "" :
+                    xForwardedFor.get(0));
+            response.getHeaders().add("X-Real-IP", (xRealIp == null || xRealIp.isEmpty()) ? "" : xRealIp.get(0));
+            response.getHeaders().add("Remote-Host", (remoteHost == null || remoteHost.isEmpty()) ? "" :
+                    remoteHost.get(0));
+        });
+
+        //身份认证等等....
+        
+        return chain.filter(exchange);
+    }
+
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>通过上述设置以后，我们就能正常在request请求头中获取IP信息，并可使用请求头透传到各服务模块内。</p>
 
                 
             </div>
@@ -561,7 +508,7 @@ httpPost.setConfig(requestConfig);
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://raoys.github.io/2021/10/03/it-java-202112111345.html">https://raoys.github.io/2021/10/03/it-java-202112111345.html</a>
+                    <a href="https://raoys.github.io/2022/03/01/it-java-202203011532.html">https://raoys.github.io/2022/03/01/it-java-202203011532.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -599,8 +546,16 @@ httpPost.setConfig(requestConfig);
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/JAVA/">
-                                    <span class="chip bg-color">JAVA</span>
+                                <a href="/tags/SpringCloud/">
+                                    <span class="chip bg-color">SpringCloud</span>
+                                </a>
+                            
+                                <a href="/tags/Gateway/">
+                                    <span class="chip bg-color">Gateway</span>
+                                </a>
+                            
+                                <a href="/tags/Nginx/">
+                                    <span class="chip bg-color">Nginx</span>
                                 </a>
                             
                         </div>
@@ -1037,13 +992,13 @@ httpPost.setConfig(requestConfig);
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/03/01/it-java-202203011532.html">
+                <a href="/2022/07/26/it-docker-202207262021.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="SpringCloud使用Nginx代理、Gateway网关以后如何获取用户的真实IP">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Docker搭建Redis方法">
                         
-                        <span class="card-title">SpringCloud使用Nginx代理、Gateway网关以后如何获取用户的真实IP</span>
+                        <span class="card-title">Docker搭建Redis方法</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1054,14 +1009,14 @@ httpPost.setConfig(requestConfig);
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022年03月01日
+                            <i class="far fa-clock fa-fw icon-date"></i>2022年07月26日
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%90%8E%E7%AB%AF/" class="post-category">
-                                    后端
+                            <a href="/categories/%E5%AE%B9%E5%99%A8/" class="post-category">
+                                    容器
                                 </a>
                             
                             
@@ -1071,16 +1026,8 @@ httpPost.setConfig(requestConfig);
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/SpringCloud/">
-                        <span class="chip bg-color">SpringCloud</span>
-                    </a>
-                    
-                    <a href="/tags/Gateway/">
-                        <span class="chip bg-color">Gateway</span>
-                    </a>
-                    
-                    <a href="/tags/Nginx/">
-                        <span class="chip bg-color">Nginx</span>
+                    <a href="/tags/Docker/">
+                        <span class="chip bg-color">Docker</span>
                     </a>
                     
                 </div>
@@ -1094,13 +1041,13 @@ httpPost.setConfig(requestConfig);
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2018/09/01/it-python-01.html">
+                <a href="/2021/10/03/it-java-202112111345.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="如何让Python pip使用国内镜像体验飞一样的速度">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="HttpClient 如何设置请求接口等待时间">
                         
-                        <span class="card-title">如何让Python pip使用国内镜像体验飞一样的速度</span>
+                        <span class="card-title">HttpClient 如何设置请求接口等待时间</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1111,7 +1058,7 @@ httpPost.setConfig(requestConfig);
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018年09月01日
+                                <i class="far fa-clock fa-fw icon-date"></i>2021年10月03日
                             </span>
                         <span class="publish-author">
                             
@@ -1128,8 +1075,8 @@ httpPost.setConfig(requestConfig);
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Python/">
-                        <span class="chip bg-color">Python</span>
+                    <a href="/tags/JAVA/">
+                        <span class="chip bg-color">JAVA</span>
                     </a>
                     
                 </div>

@@ -123,6 +123,38 @@
   </entry>
   
   <entry>
+    <title>SpringCloud使用Nginx代理、Gateway网关以后如何获取用户的真实IP</title>
+    <link href="https://raoys.github.io/2022/03/01/it-java-202203011532.html"/>
+    <id>https://raoys.github.io/2022/03/01/it-java-202203011532.html</id>
+    <published>2022-03-01T07:32:13.000Z</published>
+    <updated>2025-01-15T07:40:00.325Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>背景</strong></p><ul><li>微服务架构使用了Nginx代理转发、并且使用了SpringCloud的Gateway统一控制所有请求,并获取用户请求的IP地址。</li></ul><h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><pre class="line-numbers language-none"><code class="language-none">1. Nginx设置  location / {       root /opt/xxx/xxx-auth;       index  index.html index.htm;       try_files $uri $uri/ /index.html;            # 获取用户请求ip      proxy_set_header Host $host;      proxy_set_header X-Real-IP $remote_addr;  #获取客户端真实IP      proxy_set_header REMOTE-HOST $remote_addr;  }    2. Gateway网关设置：@Component@Log4j2public class AuthenticationFilter implements GlobalFilter, Ordered {    /**     * 验证请求头是否带有Authentication     */    @Override    public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {        ServerHttpRequest request = exchange.getRequest();        ServerHttpResponse response = exchange.getResponse();        String path = request.getPath().pathWithinApplication().value();        Optional.of(exchange.getRequest()).ifPresent(item -&gt; {            // 获取客户端IP地址            List&lt;String&gt; xForwardedFor = item.getHeaders().get("x-forwarded-for");            List&lt;String&gt; xRealIp = item.getHeaders().get("x-real-ip");            List&lt;String&gt; remoteHost = item.getHeaders().get("remote-host");            response.getHeaders().add("X-Forwarded-For", (xForwardedFor == null || xForwardedFor.isEmpty()) ? "" :                    xForwardedFor.get(0));            response.getHeaders().add("X-Real-IP", (xRealIp == null || xRealIp.isEmpty()) ? "" : xRealIp.get(0));            response.getHeaders().add("Remote-Host", (remoteHost == null || remoteHost.isEmpty()) ? "" :                    remoteHost.get(0));        });        //身份认证等等....                return chain.filter(exchange);    }    @Override    public int getOrder() {        return 0;    }}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>通过上述设置以后，我们就能正常在request请求头中获取IP信息，并可使用请求头透传到各服务模块内。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;strong&gt;背景&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;微服务架构使用了Nginx代理转发、并且使用了SpringCloud的Gateway统一控制所有请求,并获取用户请求的IP地址。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;解决方法&quot;&gt;&lt;a href=&quot;#解决方法</summary>
+      
+    
+    
+    
+    <category term="后端" scheme="https://raoys.github.io/categories/%E5%90%8E%E7%AB%AF/"/>
+    
+    
+    <category term="SpringCloud" scheme="https://raoys.github.io/tags/SpringCloud/"/>
+    
+    <category term="Gateway" scheme="https://raoys.github.io/tags/Gateway/"/>
+    
+    <category term="Nginx" scheme="https://raoys.github.io/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
     <title>HttpClient 如何设置请求接口等待时间</title>
     <link href="https://raoys.github.io/2021/10/03/it-java-202112111345.html"/>
     <id>https://raoys.github.io/2021/10/03/it-java-202112111345.html</id>
@@ -497,31 +529,6 @@
       
     <summary type="html">&lt;p&gt;&lt;strong&gt;最近使用的linux系统内存缓存越来越大，free内存越来越小，后来从网上找到资料完美解决。&lt;/strong&gt; &lt;/p&gt;
 &lt;h4 id=&quot;第1步：执行-cat-proc-sys-vm-drop-caches名称，查看缓存值，默认值为0。（1-清空页缓存；2-</summary>
-      
-    
-    
-    
-    <category term="Linux" scheme="https://raoys.github.io/categories/Linux/"/>
-    
-    
-    <category term="Linux" scheme="https://raoys.github.io/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux修改主机名称、DNS解析</title>
-    <link href="https://raoys.github.io/2015/10/01/it-linux-02.html"/>
-    <id>https://raoys.github.io/2015/10/01/it-linux-02.html</id>
-    <published>2015-10-01T11:22:32.000Z</published>
-    <updated>2025-01-14T03:16:09.138Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>Linux修改主机名称、DNS解析步骤</strong> </p><h4 id="inux更改主机名称："><a href="#inux更改主机名称：" class="headerlink" title="inux更改主机名称："></a>inux更改主机名称：</h4><pre class="line-numbers language-none"><code class="language-none">vi /etc/sysconfig/network打开配置文件设置HOSTNAME=hadoop(自己想更改的名称)退出保存即可测试：重启机器<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="设置DNS域名解析："><a href="#设置DNS域名解析：" class="headerlink" title="设置DNS域名解析："></a>设置DNS域名解析：</h4><pre class="line-numbers language-none"><code class="language-none">vi /etc/hosts打开配置文件在最后加入：ip地址 域名称（192.168.110.101 hadoop）保存退出即可测试：ping hadoop<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="设置ip地址："><a href="#设置ip地址：" class="headerlink" title="设置ip地址："></a>设置ip地址：</h4><pre class="line-numbers language-none"><code class="language-none">查看ip地址：ifconfig修改ip地址：vi /etc/sysconfig/network-scripts/ifcfg-eth0 打开配置文件设置ip地址，网关、域名等保存退出，执行命令：service network restart<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;&lt;strong&gt;Linux修改主机名称、DNS解析步骤&lt;/strong&gt; &lt;/p&gt;
-&lt;h4 id=&quot;inux更改主机名称：&quot;&gt;&lt;a href=&quot;#inux更改主机名称：&quot; class=&quot;headerlink&quot; title=&quot;inux更改主机名称：&quot;&gt;&lt;/a&gt;inux更改主机</summary>
       
     
     

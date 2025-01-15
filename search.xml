@@ -110,6 +110,35 @@
     
     
     <entry>
+      <title>SpringCloud使用Nginx代理、Gateway网关以后如何获取用户的真实IP</title>
+      <link href="2022/03/01/it-java-202203011532.html"/>
+      <url>2022/03/01/it-java-202203011532.html</url>
+      
+        <content type="html"><![CDATA[<p><strong>背景</strong></p><ul><li>微服务架构使用了Nginx代理转发、并且使用了SpringCloud的Gateway统一控制所有请求,并获取用户请求的IP地址。</li></ul><h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><pre class="line-numbers language-none"><code class="language-none">1. Nginx设置  location / {       root /opt/xxx/xxx-auth;       index  index.html index.htm;       try_files $uri $uri/ /index.html;            # 获取用户请求ip      proxy_set_header Host $host;      proxy_set_header X-Real-IP $remote_addr;  #获取客户端真实IP      proxy_set_header REMOTE-HOST $remote_addr;  }    2. Gateway网关设置：@Component@Log4j2public class AuthenticationFilter implements GlobalFilter, Ordered {    /**     * 验证请求头是否带有Authentication     */    @Override    public Mono&lt;Void&gt; filter(ServerWebExchange exchange, GatewayFilterChain chain) {        ServerHttpRequest request = exchange.getRequest();        ServerHttpResponse response = exchange.getResponse();        String path = request.getPath().pathWithinApplication().value();        Optional.of(exchange.getRequest()).ifPresent(item -&gt; {            // 获取客户端IP地址            List&lt;String&gt; xForwardedFor = item.getHeaders().get("x-forwarded-for");            List&lt;String&gt; xRealIp = item.getHeaders().get("x-real-ip");            List&lt;String&gt; remoteHost = item.getHeaders().get("remote-host");            response.getHeaders().add("X-Forwarded-For", (xForwardedFor == null || xForwardedFor.isEmpty()) ? "" :                    xForwardedFor.get(0));            response.getHeaders().add("X-Real-IP", (xRealIp == null || xRealIp.isEmpty()) ? "" : xRealIp.get(0));            response.getHeaders().add("Remote-Host", (remoteHost == null || remoteHost.isEmpty()) ? "" :                    remoteHost.get(0));        });        //身份认证等等....                return chain.filter(exchange);    }    @Override    public int getOrder() {        return 0;    }}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>通过上述设置以后，我们就能正常在request请求头中获取IP信息，并可使用请求头透传到各服务模块内。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 后端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SpringCloud </tag>
+            
+            <tag> Gateway </tag>
+            
+            <tag> Nginx </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HttpClient 如何设置请求接口等待时间</title>
       <link href="2021/10/03/it-java-202112111345.html"/>
       <url>2021/10/03/it-java-202112111345.html</url>
